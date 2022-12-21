@@ -108,8 +108,21 @@ const PrescriptionFormEmpty = ({ changeImgURL }) => {
     const handleChange = (e) => {
         console.log(state.Description)
         const name = e.target.name;
-    
-        setEmptyStates({ ...emptyStates, isImageFile: true })
+        if (name == "Name") {
+            setEmptyStates({ ...emptyStates, isName: true })
+        } else if (name == "Address") {
+            setEmptyStates({ ...emptyStates, isAddress: true })
+        } else if (name == "Age") {
+            setEmptyStates({ ...emptyStates, isAge: true })
+        } else if (name == "DOB") {
+            setEmptyStates({ ...emptyStates, isDOB: true })
+        } else if (name == "MobileNo") {
+            setEmptyStates({ ...emptyStates, isMobileNo: true })
+        } else if (name == "Receipt") {
+            setEmptyStates({ ...emptyStates, isReceipt: true })
+        } else if (name == "ImageFile") {
+            setEmptyStates({ ...emptyStates, isImageFile: true })
+        }
         const value = name == "ImageFile" ? e.target.files[0] : e.target.value;
 
         setState({ ...state, [name]: value })
@@ -160,7 +173,6 @@ const PrescriptionFormEmpty = ({ changeImgURL }) => {
         setState(
             { ...state, file: imageSource }
         )
-        console.log(state.file)
         // },2000)
         setImageTaken(true)
         setImageOpen(false);
@@ -206,7 +218,7 @@ const PrescriptionFormEmpty = ({ changeImgURL }) => {
                                 className="inp"
                                 required
                             />
-                            <Label for="exampleDate-" >
+                            <Label for="exampleDate" >
                                 Enter Password :
                             </Label>
                         </FormGroup>
@@ -239,34 +251,7 @@ const PrescriptionFormEmpty = ({ changeImgURL }) => {
 
                             {createInputs()}
                             <Input type='button' value='+ Add Prescription ' onClick={addClick} style={{ marginBottom: "10px", width: "800px" }} />
-                            <Label >
-                                Upload Image
-                            </Label>
-                            <FormGroup style={{ width: "800px" }}>
-                                <Input
-
-                                    id="ImageFile"
-                                    name="ImageFile"
-                                    type="file"
-                                    accept=".png,.jpeg"
-                                    className="inp"
-                                    onChange={handleImageFile}
-
-                                />
-
-                            </FormGroup>
-                            <Button onClick={() => { setImageOpen(true); setShowImgCapture(true) }} style={{ marginBottom: "10px" }} >Take Photo</Button>
-                            {showImgCapture && imageOpen && (
-                                <>
-                                    <ImageCapture
-                                        onCapture={onCapture}
-                                        onError={onError}
-                                        width={300}
-                                        userMediaConfig={config}
-                                    />
-
-                                </>
-                            )}
+ 
                             <Button
                                 color="success"
                                 onClick={validateForm}

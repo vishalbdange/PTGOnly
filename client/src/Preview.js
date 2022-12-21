@@ -7,47 +7,21 @@ import { saveAs } from 'file-saver'
 import sign from "./sign.png"
 import drskinfo from "./drskinfo.jpeg"
 import doctorInfo from "./doctorInfo.jpeg"
-import { FormGroup, Form, Input, Label, Button, Col,Alert ,Badge,Table,List, CardTitle,Card,CardBody} from 'reactstrap'
+import { FormGroup, Form, Input, Label, Button, Col,Alert ,Badge,Table,List} from 'reactstrap'
 import Draggable from 'react-draggable'; // The default
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import moment from 'moment';
 import CsvDownload from 'react-json-to-csv'
-import axios from 'axios'
-
 
 const Preview = ({imageURL}) => {
 
- 
-    const [fetched_prescriptions,setFetched_prescriptions] = useState([]);
 
-    useEffect(() =>{
-        axios.get('http://localhost:5000/all')
-        .then(response => {
-            console.log("All records fetched"); 
-            console.log(response.data);
-            setFetched_prescriptions(response.data);
-            })
-    },[])
-    // const columns = [
-    //     { title: "Id", field: "Id" },
-    //     { title: "dob", field: "dob" },
-    //     { title: "Visit_No", field: "Visit_No", type: "numeric" },
-    //     { title: "name", field: "name" },
-    //     { title: "address", field: "address" },
-    //     { title: "age", field: "age" },
-    //     { title: "sex", field: "sex" },
-    //     { title: "mobile_no", field: "mobile_no" },
-    //     { title: "diagnosis", field: "diagnosis" },
-    //     { title: "prescriptions", field: "prescriptions" },
-    //     { title: "Receipt", field: "Receipt" },
-    //     { title: "description", field: "description" },
-    //   ];
     const state = JSON.parse(localStorage.getItem('state'));
     const prescription = JSON.parse(localStorage.getItem('prescription'));
         // console.log(state)
     // var p_data = [];
-    const { DOB, file,Visit_No,Name, Address,Age, Sex, Diagnosis,Goal,MobileNo,Receipt,Description,ImageFile} = state;
+    const { DOB, file,Visit_No,Name, Address,Age, Sex, Diagnosis,Goal,m_num,Receipt,Description,ImageFile} = state;
 
 
     const exportPDF = () => {
@@ -205,15 +179,11 @@ const Preview = ({imageURL}) => {
         <div className="prescription-view" >
             
             <section id = "Page" className ="page"  ref={ref} >
-                
             <section>
-            
             <Draggable>
             <div style={{textAlign:"center",display:"flex",justifyContent:"center"}}><img src={aakar} className="aakar-logo" alt="Aakar Clinic" /> </div>
             </Draggable>
-            <br />
-            <i> Visit <a href="www.autismdoctor.in" target="_blank">www.autismdoctor.in</a> for learning material, videos,and links for payments, appointment and joining parent support groups</i>
-
+        
             {/* <CsvDownload 
     data={ p_data}
     filename="good_data.csv"
@@ -235,7 +205,6 @@ const Preview = ({imageURL}) => {
     Good Data ✨
   </CsvDownload> */}
             <section class="doctor-info">
-
                 <div class="doctor-name">
                 <span>Dr Santosh <surname>Kondekar</surname></span>
                 <p>Reg N:86230 ,MD DNB DCH FCPS FAIMER</p>
@@ -274,6 +243,7 @@ const Preview = ({imageURL}) => {
        }      
            {/* </Draggable> */}
             <section class="patient-profile">
+               
             <Table >
             <tbody>
                 <tr>
@@ -283,7 +253,7 @@ const Preview = ({imageURL}) => {
                 <td >
 
                {/* {displayDate} &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;  Case_Serial_no  &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;{JSON.parse(localStorage.getItem('counter')-2)}  */}
-               {displayDate } &nbsp; &nbsp;&nbsp; <b>Payment Receipt No.</b> &nbsp; &nbsp;W-{JSON.parse(localStorage.getItem('counter'))+2000}/2022
+               {displayDate } &nbsp;  <b>Payment Receipt No. : </b> W-{JSON.parse(localStorage.getItem('counter'))+2000}/2022
                 </td>
                 </tr>
                 <tr >
@@ -300,7 +270,7 @@ const Preview = ({imageURL}) => {
                         <b>Moblie No :</b> &nbsp;
                     </td>
                     <td >
-                     {MobileNo}  
+                     {m_num}  
                     
                     </td>
                 </tr>
@@ -427,36 +397,6 @@ const Preview = ({imageURL}) => {
             </div>
            
             </div>
-            </section>
-            <section>
-            {/* <MaterialTable title="Basic Table" columns={columns} data={fetched_prescriptions} />; 
-            */}
-
-            {
-                fetched_prescriptions.map((pres => {
-                    return (
-                        <>
-                          <Card style={{display:"none"}}>
-                                <CardTitle>Name : {pres.name}</CardTitle>
-                                <CardBody>
-                                <p>{pres.Visit_No}</p>
-                                <p>{pres.age}</p>
-                                <p>{pres.date}</p>
-                                {
-                                    pres.prescription.map(p =>{
-                                        <li>{p}</li>
-                                    })
-                                }
-                                <p>{pres.Visit_No}</p>
-                                <p>{pres.desc}</p>
-                                <p>Mob no :  {MobileNo}</p>
-                                <p>sex:  {Sex}</p>
-                                </CardBody>
-                          </Card>
-                        </>
-                    )
-                }))
-            }
             </section>
             {/* <TestPDF state={state} /> */}
 

@@ -14,6 +14,8 @@ const Home = () => {
                 <Link to="/form2"  style={{margin:"10px"}}><Button color="info" >Form2</Button></Link>
                 <Link to="/form1"  style={{margin:"10px"}}><Button color="info" >Form1</Button></Link>
                 <Link to="/cars"  style={{margin:"10px"}}><Button color="info" >CARS</Button></Link>
+                <Link to="/form10ia"  style={{margin:"10px"}}><Button color="info" >Form_10IA</Button></Link>
+                <Link to="/all"  style={{margin:"10px"}}><Button color="info" >All Prescriptions</Button></Link>
             </div>
             <div>
                 <UseFulLinks />
@@ -21,5 +23,5 @@ const Home = () => {
 
         </div>
     )
-}    
+}   
 export default Home

@@ -12,13 +12,13 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-const PORT =   5000;
+const PORT =  5000;
 dotenv.config();
  
  var sample;
  async function run() {
     await mongoose.connect('mongodb+srv://aakarclinic:Aakar%40clinic1@cluster0.lozeiof.mongodb.net/?retryWrites=true&w=majority');
-    sample =  await mongoose.model('Prescription').find(); // Works!
+    sample =  await Prescription.find(); // Works!
   }
 run();
   
@@ -27,35 +27,38 @@ app.get('/',(req,res)=>{
 });
 app.get('/all',(req,res)=>{
     console.log("All request received")
-    console.log(JSON.stringify(sample))
-    res.send(JSON.stringify(sample));
+    console.log(sample)
+    res.send(sample)
+    return sample;
 })
 
 app.post('/prescription',(req,res)=>{
     
-    console.log(req.body);
+    console.log("Request printing...")
     const pres = req.body;
     const prescription = new Prescription({ 
-    dob: pres.DOB,
-    visit_no: pres.Visit_No,
-    name : pres.Name,
-    address: pres.Address,
-    age : pres.Age,
-    sex : pres.Sex, 
-    mobile_no : pres.MobileNo,
-    diagnosis :pres.Diagnosis,
-    goal_for_next_month : pres.Goal,
-    prescription: pres.Prescription,
-    payment_receipt : pres.Receipt,
-    description : pres.Description
-});
-prescription
-    .save()
-    .then(
-        () => console.log("One Prescription added"), 
-        (err) => console.log(err.message)
-    );
-    res.send("Post request sent");
+        pid:pres.m_num,
+        dob: pres.DOB,
+        visit_no: pres.Visit_No,
+        name : pres.Name,
+        address: pres.Address,
+        age : pres.Age,
+        sex : pres.Sex, 
+        mobile_no : pres.m_num,
+        diagnosis :pres.Diagnosis,
+        goal_for_next_month : pres.Goal,
+        prescription: pres.Prescription,
+        payment_receipt : pres.Receipt,
+        description : pres.Description
+    });
+    console.log(prescription)
+    prescription
+        .save()
+        .then(
+            () => console.log("One Prescription added"), 
+            (err) => console.log(err.message)
+        );
+        res.send("Post request sent");
 })
 
 // const prescription = new Prescription({
@@ -78,6 +81,6 @@ prescription
 //         (err) => console.log(err.message)
 //     );
  
-app.listen(PORT, () => console.log("Server is running"));
+app.listen(PORT, () => console.log("Server is running" + PORT));
 
  

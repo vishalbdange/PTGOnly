@@ -19,7 +19,7 @@ const PreviewEmpty = ({ imageURL }) => {
 
     const state = JSON.parse(localStorage.getItem('state'));
     const prescription = JSON.parse(localStorage.getItem('prescription'));
-    console.log(state)
+    // console.log(state)
 
 
     const exportPDF = () => {
@@ -83,8 +83,7 @@ const PreviewEmpty = ({ imageURL }) => {
                     <Draggable>
                         <div style={{ textAlign: "center", display: "flex", justifyContent: "center" }}><img src={aakar} className="aakar-logo" alt="Aakar Clinic" /> </div>
                     </Draggable>
-                    <br/>
-                    <i>Visit <a href="www.autismdoctor.in">www.autismdoctor.in</a> for learning material, videos,and links for payments, appointment and joining parent support groups</i>
+
                     <section class="doctor-info">
                         <div class="doctor-name">
                             <span>Dr Santosh <surname>Kondekar</surname></span>
@@ -96,38 +95,21 @@ const PreviewEmpty = ({ imageURL }) => {
                         </div>
                     </section>
                     <br /><br /><br />
-                    {
-                                    state.file !== null ? 
-                                    (
-                                        <>
-                                        <img src={state.file} style={{width:"150px",float:"right"}} alt="" /> 
-                                        </>
-                                    ) : 
-                                    (
-                                        <>
-                                        <img src={imageURL} style={{width:"150px",float:"right"}} alt="" /> 
-                                        </>
-                                    )
-                                }   
-                    <section className='clearFix'>
+                    <section>
                         {
                            state.Certificate === '' ? (
                              <></>
                            ) : (
-                                <>
-                            <div style={{width:"520px"}}>
+                            <>
                             <label><strong>CERTIFICATE</strong> &nbsp;</label>
                             <br /><br />
                             <p>{state.Certificate}</p>
-                           
-
-                            </div>
                             </>
                            )
 
                             
                            }
-                                
+                       
                     </section>
                     <br />
                     <section>
@@ -138,7 +120,7 @@ const PreviewEmpty = ({ imageURL }) => {
                             prescription.length === 0 ? (
                                 <></>
                             ) : (
-                                <section style={{width:"520px"}}>
+                                <section>
                                     <div>
                                         <p><b>PRESCRIPTION</b>  &nbsp; ( Join parent support group and read more about Goal Directed Cognitive Approach at <a href="http://www.neuropediatrician.com">www.neuropediatrician.com</a> )</p>
                                         <br />
@@ -155,13 +137,13 @@ const PreviewEmpty = ({ imageURL }) => {
                         }
                     </section>
                     <section>
-                    <br /> <br /> 
+                        <br /> 
                         <Draggable style={{margin:"0px !important",padding:"0px !important",width:"100px !important"}}>
-                            <div style={{height:"100px",margin :"0px !important",paddingLeft:"50px",maxWidth:"100px !important"}}>
-                            <img  style={{height:"85px",margin:"0px !important",padding:"0px !important"}}  src={sign} alt='sign' />
-                            <img  style={{height:"85px",margin:"0px !important",padding:"0px !important"}}  src={drskinfo} alt='drskinfo' />
-                            
-                            </div>
+                        <div style={{height:"100px",margin :"0px !important",paddingLeft:"50px",maxWidth:"100px !important"}}>
+                        <img  style={{height:"85px",margin:"0px !important",padding:"0px !important"}}  src={sign} alt='sign' />
+                        <img  style={{height:"85px",margin:"0px !important",padding:"0px !important"}}  src={drskinfo} alt='drskinfo' />
+                        
+                        </div>
                         </Draggable>
                         <hr  />
                         <p className="textArea" style={{color:"#338BA8"}}>

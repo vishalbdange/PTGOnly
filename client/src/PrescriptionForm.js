@@ -9,7 +9,6 @@ import { FormGroup, Form, Input, Label, Button, Col, Alert } from 'reactstrap'
 import {FormControl,InputLabel,Select,MenuItem,Badge} from '@material-ui/core'
 import ImageCapture from "react-image-data-capture";
 import axios from 'axios'
-
 const prescription_Items = require('./prescription_Items').prescription_Items;
 const PrescriptionForm = ({ changeImgURL }) => {
 
@@ -25,7 +24,7 @@ const PrescriptionForm = ({ changeImgURL }) => {
         Sex: '',
         Diagnosis: '',
         Goal: '',
-        MoblieNo: '',
+        m_num: '',
         Prescription: [],
         Receipt: ' ',
         Description: "For neurodevelopmental disorders and delays Daily Occupational Therapy,behaviour Therapy and Speech therapy is important to achieve milestones needed for activities of daily living and later control and regulation of sensory and motor issues related to development and speech,so that concrete operations can be taught and further complex skills can be achieved.Its like tutions."
@@ -43,7 +42,6 @@ const PrescriptionForm = ({ changeImgURL }) => {
         isReceipt: true,
 
     })
-
     localStorage.setItem('state', JSON.stringify(state))
     localStorage.setItem('prescription', JSON.stringify(prescription))
     // const csvDOB = state.DOB.toString();
@@ -68,15 +66,27 @@ const PrescriptionForm = ({ changeImgURL }) => {
         //     validateContent(emptyStates)
         // }
         // else{
+        console.log(state)
         prescription = values.val;
         setState({ ...state, Prescription: values.val })
-        axios.post('http://localhost:5000/prescription', state)
-        .then(response =>  console.log(response))
-        .catch(error => {
-            console.error('There was an error!', error);
-    });
+        
+    
         localStorage.setItem('prescription', JSON.stringify(prescription))
-
+        //Backend post request here
+        console.log("Printing Prescription")
+        // axios.post('http://localhost:5000/prescription,', state)
+        // .then((response) => {
+        //     console.log(response.data)
+        //     console.log("Prescription posted sucessfully")
+        // });
+        axios({
+            method: 'post',
+            url: 'http://localhost:5000/prescription',
+            data: state, // you are sending body instead
+            headers: {
+            'Content-Type': 'application/json'
+            }, 
+          })
         navigate("/prescription-view")
         // }
     }
@@ -131,7 +141,7 @@ const PrescriptionForm = ({ changeImgURL }) => {
             setEmptyStates({ ...emptyStates, isAge: true })
         } else if (name == "DOB") {
             setEmptyStates({ ...emptyStates, isDOB: true })
-        } else if (name == "MobileNo") {
+        } else if (name == "m_num") {
             setEmptyStates({ ...emptyStates, isMobileNo: true })
         } else if (name == "Receipt") {
             setEmptyStates({ ...emptyStates, isReceipt: true })
@@ -140,10 +150,11 @@ const PrescriptionForm = ({ changeImgURL }) => {
         }
         const value = name == "ImageFile" ? e.target.files[0] : e.target.value;
 
+
         setState({ ...state, [name]: value })
 
     }
-    const [enterPswd, setEnterPswd] = useState(true);
+    const [enterPswd, setEnterPswd] = useState(false);
     const [pswd, setPswd] = useState('');
     const onHandleChangePswd = (e) => {
         const value = e.target.value;
@@ -209,11 +220,8 @@ const PrescriptionForm = ({ changeImgURL }) => {
             <div style={{ textAlign: "center", display: "flex", justifyContent: "center", padding: "20px" }}><img src={aakar} className="aakar-logo" alt="Aakar Clinic" /> </div>
             {/* {validateContent} */}
             {
-                enterPswd ? (<div className="password-container">                         
-                        
-                          
+                enterPswd ? (<div className="password-container">
                     <div style={{ textAlign: "center", fontSize: "26px", fontWeight: "200 !important", margin: "20px", padding: "10px" }}>
-                         
                         <Button varient="contained" color="success" style={{ padding: "20px" }} >
                             Prescription Form  :
                         </Button>
@@ -242,10 +250,7 @@ const PrescriptionForm = ({ changeImgURL }) => {
 
                     <Form className="prescription-form" >
                         {/* <div style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",cborder:"2px solid black"}}> */}
-                        <marquee>Visit  <a href='http://www.autismdoctor.in' target="_blank">www.autismdoctor.in </a> for learning material, videos,and links for payments, appointment and joining parent support groups. </marquee>
-                        <br/>
                         <div style={{ textAlign: "center", display: "flex", justifyContent: "center" }}>
-
                             <FormGroup floating style={{ width: "400px", margin: "4px" }}>
                                 <Input
                                     id="exampleDOB"
@@ -354,7 +359,7 @@ const PrescriptionForm = ({ changeImgURL }) => {
                             <FormGroup floating style={{ width: "400px", margin: "4px", margin: "4px" }}>
                                 <Input
                                     id="MobileNo"
-                                    name="MobileNo"
+                                    name="m_num"
                                     placeholder="MobileNo"
                                     type="text"
                                     onChange={handleChange}

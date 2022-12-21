@@ -104,7 +104,7 @@ const Form2 = () => {
         {
             name : "B2.4: Sameness / Rigidness: Greeting rituals.age inappropriatenes",
             id:"Q22"
-        }, 
+        },
         {
             name : "B2.5:Sameness / Rigidness: Need to take same route.age inappropriateness",
             id:"Q23"

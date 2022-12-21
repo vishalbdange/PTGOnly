@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
 const PrescriptionSchema = new mongoose.Schema({
+   pid : {
+    type :  String,
+  },
     dob : {
       type :  Date,
     },

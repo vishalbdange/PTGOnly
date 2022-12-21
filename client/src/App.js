@@ -1,6 +1,7 @@
 import React,{ createRef, useState ,useEffect,useRef} from 'react'
 import './App.css';
 import PrescriptionForm from './PrescriptionForm'
+import Prescriptions from './All_Prescriptions/prescriptions'
 import PrescriptionFormEmpty from './PrescriptionFormEmpty'
 import Preview from './Preview';
 import PdfTemplate from './PdfTemplate';
@@ -21,9 +22,8 @@ import {
 import PreviewEmpty from './PreviewEmpty';
 import Form2 from './Form2/Form2'
 import Form1 from './Form1/Form1'
-import Cars from './CARS/form'
-
-
+import CARS from './CARS/Form'
+import Form10IA from './Form_10IA/Form'
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'row',
@@ -44,7 +44,10 @@ function App() {
   
 
   return (
+    <>
+   
     <Router>
+     
       <Routes>
         
         <Route exact path="/" element={ <Home />} />
@@ -56,10 +59,12 @@ function App() {
         <Route  exact path="/autism-dsm" element={<AutismDSM />} />
         <Route  exact path="/form2" element={<Form2 />} />
         <Route  exact path="/form1" element={<Form1 />} />
-        <Route  exact path="/cars" element={<Cars />} />
+        <Route  exact path="/cars" element={<CARS />} />
+        <Route  exact path="/form10ia" element={<Form10IA />} />
+        <Route  exact path="/all" element={<Prescriptions />} />
       </Routes>
     </Router>
-
+    </>
   );
 }
 
