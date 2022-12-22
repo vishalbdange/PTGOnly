@@ -21,14 +21,15 @@ dotenv.config();
     sample =  await Prescription.find(); // Works!
   }
 run();
-  
+ 
 app.get('/',(req,res)=>{
     res.send("Home Server Page")
 });
-app.get('/all',(req,res)=>{
+app.get('/all',async (req,res)=>{
     console.log("All request received")
+    var sample = await Prescription.find();
     console.log(sample)
-    res.send(sample)
+    res.status(200).json(sample)
     return sample;
 })
 
