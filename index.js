@@ -33,6 +33,7 @@ app.get('/all',async (req,res)=>{
     return sample;
 })
 
+
 app.post('/prescription',(req,res)=>{
     
     console.log("Request printing...")

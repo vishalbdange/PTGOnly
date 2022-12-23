@@ -21,7 +21,7 @@ const NavbarComponent = () => {
     const pages = ['Form1','Form2','CARS','All'];
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
-    
+
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };

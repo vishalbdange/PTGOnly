@@ -81,7 +81,7 @@ const PrescriptionForm = ({ changeImgURL }) => {
         // });
         axios({
             method: 'post',
-            url: 'http://localhost:5000/prescription',
+            url: 'https://aakar-clinic.onrender.com/prescription',
             data: state, // you are sending body instead
             headers: {
             'Content-Type': 'application/json'

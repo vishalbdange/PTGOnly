@@ -16,11 +16,11 @@ import { Badge } from 'reactstrap';
 const Prescriptions = () => {
     
  
-   
+  
     const [prescriptions,setPrescriptions] = useState([]);
    
     useEffect(()=>{
-        axios.get('http://localhost:5000/all')
+        axios.get('https://aakar-clinic.onrender.com/all')
         .then(response => setPrescriptions(response.data)  );
         
     },[])
@@ -49,20 +49,34 @@ const Prescriptions = () => {
     }
     const searchItems = () => {
         // console.log(p_id)
-        if (p_id !== '') {
-            const filteredData = prescriptions.filter((item) => {
-                return item.pid?.includes(p_id.toLowerCase())
+
+        if (p_id != '') {
+            var filteredData = prescriptions.filter((item) => {
+                console.log(item.pid)
+                console.log(p_id)
+                return item.pid?.includes(p_id)
             })
             console.log(filteredData)
             setFilteredResults(filteredData)
+            if(p_name != ''){
+                filteredData = filteredResults.filter((item) => {
+                    return item.name?.toLowerCase().includes(p_name.toLowerCase())
+                })
+                console.log(filteredData)
+                setFilteredResults(filteredData)
+            }
         }
-        if(p_name != ''){
-            const filteredData = filteredResults.filter((item) => {
-                return item.Name?.includes(p_name.toLowerCase())
+        else if(p_name !== ''){
+            var filteredData = prescriptions.filter((item) => {
+                return item.name?.toLowerCase().includes(p_name.toLowerCase())
             })
             console.log(filteredData)
-            setFilteredResults(filteredData)
-           
+            setFilteredResults(filteredData) 
+            // filteredData = filteredResults.filter((item) => {
+            //     return item.pid?.includes(p_id.toLowerCase())
+            // })
+            console.log(filteredData)
+            // setFilteredResults(filteredData) 
         }
         if(p_name === '' && p_id === ''){
             setFilteredResults(prescriptions)
@@ -74,6 +88,8 @@ const Prescriptions = () => {
         setP_id('');
         setP_name('')
     }
+
+    
    
     return (
         <>
@@ -114,6 +130,7 @@ const Prescriptions = () => {
            
                     // console.log(filteredResults)
                     filteredResults.map((item1,key) => {
+                        console.log(item1)
                         return(
                             <> 
                                 <Card sx={{ width: 400,}} style={{margin:"10px"}}>
@@ -122,19 +139,19 @@ const Prescriptions = () => {
                                         Patient ID : {item1.pid}
                                         </Typography>
                                         <Typography sx={{ mb: 1.5 }} variant="body2">
-                                        Name : {item1.Name}
+                                        Name : {item1.name}
                                         </Typography>
                                         <Typography sx={{ mb: 1.5 }} variant="body2">
-                                         Visit No. : {item1.Visit_No}
+                                         Visit No. : {item1.visit_no}
                                         </Typography>
                                         <Typography variant="body2">
-                                        Age : {item1.Age} &nbsp;&nbsp;&nbsp;&nbsp; Sex : {item1.Sex} 
+                                        Age : {item1.age} &nbsp;&nbsp;&nbsp;&nbsp; Sex : {item1.sex} 
                                         <br />
                                         {/* {'"a benevolent smile"'} */}
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button size="small">View More</Button>
+                                        <Button size="small" href={`/all/${item1.pid}`}>View More</Button>
                                     </CardActions>
                                 </Card>
                             </>
@@ -146,25 +163,25 @@ const Prescriptions = () => {
                     prescriptions.map((prescription,key) => {
                     return(
                         <> 
-                            <Card sx={{ width: 400,}} style={{margin:"10px"}}>
+                            <Card sx={{ width: 300}} style={{margin:"10px"}}>
                                 <CardContent>
                                     <Typography sx={{ mb: 1.5 }} variant="body2">
                                     Patient ID : {prescription.pid}
                                     </Typography>
                                     <Typography sx={{ mb: 1.5 }} variant="body2">
-                                    Name : {prescription.Name}
+                                    Name : {prescription.name}
                                     </Typography>
                                     <Typography sx={{ mb: 1.5 }} variant="body2">
-                                     Visit No. : {prescription.Visit_No}
+                                     Visit No. : {prescription.visit_no}
                                     </Typography>
                                     <Typography variant="body2">
-                                    Age : {prescription.Age} &nbsp;&nbsp;&nbsp;&nbsp; Sex : {prescription.Sex} 
+                                    Age : {prescription.age} &nbsp;&nbsp;&nbsp;&nbsp; Sex : {prescription.sex} 
                                     <br />
                                     {/* {'"a benevolent smile"'} */}
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small">View More</Button>
+                                    <Button size="small" href={`/all/${prescription.pid}`} >View More</Button>
                                 </CardActions>
                             </Card>
                         </>
