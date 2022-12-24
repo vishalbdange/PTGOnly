@@ -68,7 +68,11 @@ function App() {
         <Route  exact path="/cars" element={<CARS />} />
         <Route  exact path="/form10ia" element={<Form10IA />} />
         <Route  exact path="/all" element={<Prescriptions />} />
-        <Route  exact path="/all/:pid" element={<Prescription />} />
+        <Route  exact path="/all/prescriptions/:pid" element={<Prescription />} />
+        {/* <Route  exact path="/all/:pid" 
+                render={(props) =>
+        <Prescription {...props} key={props.match.params.id} />
+      }/> */}
       </Routes>
     </Router>
     </>

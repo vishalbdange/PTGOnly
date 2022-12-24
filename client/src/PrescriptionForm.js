@@ -9,6 +9,10 @@ import { FormGroup, Form, Input, Label, Button, Col, Alert } from 'reactstrap'
 import {FormControl,InputLabel,Select,MenuItem,Badge} from '@material-ui/core'
 import ImageCapture from "react-image-data-capture";
 import axios from 'axios'
+import NavbarComponent from './NavbarComponent';
+import Draggable from 'react-draggable';
+import {ArrowCircleDown,ArrowCircleUp,ArrowCircleUp1} from '@mui/icons-material';
+import {IconButton} from '@material-ui/core';
 const prescription_Items = require('./prescription_Items').prescription_Items;
 const PrescriptionForm = ({ changeImgURL }) => {
 
@@ -68,8 +72,10 @@ const PrescriptionForm = ({ changeImgURL }) => {
         // else{
         console.log(state)
         prescription = values.val;
-        setState({ ...state, Prescription: values.val })
-        
+        console.log(prescription)
+        state.Prescription = prescription;
+        // setState({ ...state, Prescription: prescription })
+        console.log(state)
     
         localStorage.setItem('prescription', JSON.stringify(prescription))
         //Backend post request here
@@ -95,6 +101,27 @@ const PrescriptionForm = ({ changeImgURL }) => {
     function createInputs() {
         return values.val.map((el, i) =>
             <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                 <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={() => moveUp(i)}
+                    color="inherit"
+                    >
+                    <ArrowCircleUp />
+                    </IconButton>
+                <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={() => moveDown(i)}
+                color="inherit"
+                >
+                <ArrowCircleDown />
+                </IconButton>
+                {/* <Input type='button' style={{ width: "60px", borderRadius: "10%", margin: "10px" }} value='Up' onClick={() => moveUp(i)} /> */}
                 <Input type="text" value={el || ''} style={{ margin: "10px", width: "720px" }} onChange={e => { handleChangeList(e, i) }} />
                 <Input type='button' style={{ width: "60px", borderRadius: "10%", margin: "10px" }} value='X' onClick={() => removeClick(i)} />
             </div>
@@ -111,6 +138,32 @@ const PrescriptionForm = ({ changeImgURL }) => {
     function handleChangeList(e, i) {
         let vals = [...values.val];
         vals[i] = e.target.value;
+        setValues({ val: vals });
+    }
+
+    function moveUp(i){
+        console.log(i)
+        let vals = [...values.val]
+        var temp = vals[i];
+        console.log(vals[i])
+        console.log(vals[i-1])
+        if(i>0){
+            vals[i]=vals[i-1];
+            vals[i-1]=temp;
+        }
+        setValues({ val: vals });
+    }
+    function moveDown(i){
+        console.log(i)
+        let vals = [...values.val]
+        let n = vals.length;
+        var temp = vals[i];
+        console.log(vals[i])
+        console.log(vals[i+1])
+        if(i<n-1){
+            vals[i]=vals[i+1];
+            vals[i+1]=temp;
+        }
         setValues({ val: vals });
     }
     const addClick = (text) => {
@@ -217,6 +270,7 @@ const PrescriptionForm = ({ changeImgURL }) => {
 
 
         <div className="PreForm">
+            <NavbarComponent />
             <div style={{ textAlign: "center", display: "flex", justifyContent: "center", padding: "20px" }}><img src={aakar} className="aakar-logo" alt="Aakar Clinic" /> </div>
             {/* {validateContent} */}
             {
@@ -414,8 +468,13 @@ const PrescriptionForm = ({ changeImgURL }) => {
                                     style={{padding:"2px",backgroundColor:"white"}}
                                     
                                 >
-                                    {prescription_Items.map((p_item,i) => {
-                                        return(<MenuItem onClick={() => addClick({p_item}.p_item)}  >{p_item}</MenuItem>)                                        
+                                    {prescription_Items.map((p_item,key) => {
+                                        return(<>
+                                        
+                                            <MenuItem onClick={() => addClick({p_item}.p_item)}  >{p_item}</MenuItem>
+                                       
+                                        </>
+                                        )                                        
                                     })}
                                 </Select>   
                                 </Badge>               

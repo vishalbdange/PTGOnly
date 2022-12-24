@@ -140,11 +140,13 @@ const NavbarComponent = () => {
                         display: { xs: 'block', md: 'none' },
                     }}
                     >
-                    {pages.map((page) => (
-                        <MenuItem key={page} onClick={handleCloseNavMenu}>
-                        <Typography textAlign="center">{page}</Typography>
+                        {/* <MenuItem key='form1' href="/form1">
+                            <Typography textAlign="center">Form1</Typography>
                         </MenuItem>
-                    ))}
+                        <MenuItem key='all' href="/all">
+                            <Typography textAlign="center">All</Typography>
+                        </MenuItem> */}
+
                     </Menu>
                 </Box>
                 {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -167,15 +169,36 @@ const NavbarComponent = () => {
                     LOGO
                 </Typography> */}
                 <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                    {pages.map((page) => (
                     <Button
-                        key={page}
-                        onClick={handleCloseNavMenu}
+                        key='home'
                         sx={{ my: 2, color: 'white', display: 'block' }}
+                        href='/'
                     >
-                        {page}
+                       Home
                     </Button>
-                    ))}
+
+                    <Button
+                        key='prescription'
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        href='/prescription'
+                    >
+                       Prescription
+                    </Button>
+                    <Button
+                        key='all'
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        href='/all'
+                    >
+                       All
+                    </Button>
+                    {/* <Button
+                        key='form2'
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        href='/form2'
+                    >
+                       FORM2
+                    </Button> */}
+              
                 </Box>
 
                 {/* <Box sx={{ flexGrow: 0 }}>

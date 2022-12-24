@@ -1,32 +1,36 @@
 import React,{ createRef, useState ,useEffect,useRef} from 'react'
 import './Preview.css'
-import aakar from "./aakar.jpg"
-import TestPDF from './TestPDF'
+import aakar from "./assets/aakar.jpg"
+import autism2 from '../autism2.jpeg'
+// import TestPDF from './assets/TestPDF'
 import { useScreenshot } from 'use-react-screenshot'
 import { saveAs } from 'file-saver'
-import sign from "./sign.png"
-import drskinfo from "./drskinfo.jpeg"
-import autism2 from "./autism2.jpeg"
-import doctorInfo from "./doctorInfo.jpeg"
+import sign from "./assets/sign.png"
+import drskinfo from "./assets/drskinfo.jpeg"
+import NavbarComponent from '../NavbarComponent'
 import { FormGroup, Form, Input, Label, Button, Col,Alert ,Table,List} from 'reactstrap'
 import Draggable from 'react-draggable'; // The default
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import moment from 'moment';
+import {Badge} from "@material-ui/core"
+import CsvDownload from 'react-json-to-csv'
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import CsvDownload from 'react-json-to-csv'
-import NavbarComponent from './NavbarComponent'
-import { Paper } from '@mui/material'
-const Preview = ({imageURL}) => {
+import Paper from '@mui/material/Paper';
 
+const Preview = (prop) => {
 
-    const state = JSON.parse(localStorage.getItem('state'));
-    const prescription = JSON.parse(localStorage.getItem('prescription'));
+    console.log(prop)
+    
+   const pres = prop.prescription;
+   console.log(pres)
+    
+    // console.log(prescription)
+    // const state = JSON.parse(localStorage.getItem('state'));
+    // const prescription = JSON.parse(localStorage.getItem('prescription'));
         // console.log(state)
     // var p_data = [];
-    const { DOB, file,Visit_No,Name, Address,Age, Sex, Diagnosis,Goal,m_num,Receipt,Description,ImageFile} = state;
-
 
     const exportPDF = () => {
         const input = document.getElementById("Page");
@@ -36,12 +40,12 @@ const Preview = ({imageURL}) => {
             const imgData = canvas.toDataURL('img/png');
             const pdf = new jsPDF('p','mm','a4');
             pdf.addImage(imgData,'JPEG',0,0,210,310);
-            if(state.name !== null){
-                var pdfname = `${state.Name}.pdf`;
+            if(pres.name !== null){
+                var pdfname = `${pres.name}.pdf`;
                 pdf.save(pdfname);
             }
             else{
-                pdf.save(`${state.Visit_No}.pdf`);
+                pdf.save(`${pres.moblie_number}.pdf`);
             }
         })
     }
@@ -57,7 +61,7 @@ const Preview = ({imageURL}) => {
         console.log(isSS)
     }
 
-    const [textAreaStyle,setTextAreaStyle] = useState({width:"100%",border:"none",padding:"0%",margin:"0%"});
+    // const [textAreaStyle,setTextAreaStyle] = useState({width:"100%",border:"none",padding:"0%",margin:"0%"});
      useEffect (() => {
         var count = JSON.parse(localStorage.getItem('counter') || 0);
       
@@ -78,142 +82,122 @@ const Preview = ({imageURL}) => {
         // prescription_d.push(csvState);
         // localStorage.setItem('prescription_data', JSON.stringify(prescription_d))
         // p_data = prescription_d;
-        if(window.innerWidth > 900){
+        // if(window.innerWidth > 900){
               
-            setTextAreaStyle({width:"100%",border:"none",padding:"0%",margin:"0%",overflow:"hidden !important",maxHeight:"200px"})
-        } 
-        else if(window.innerWidth  < 900 &&  window.innerWidth > 510){  
-            setTextAreaStyle({width:"100%",border:"none",padding:"0%",margin:"0%",overflow:"hidden !important",maxHeight:"400px"});
-        } 
+        //     setTextAreaStyle({width:"100%",border:"none",padding:"0%",margin:"0%",overflow:"hidden !important",maxHeight:"200px"})
+        // } 
+        // else if(window.innerWidth  < 900 &&  window.innerWidth > 510){  
+        //     setTextAreaStyle({width:"100%",border:"none",padding:"0%",margin:"0%",overflow:"hidden !important",maxHeight:"400px"});
+        // } 
         
     })
-    function getAge(dob) {
+    // function getAge(dob) {
           
-        var dobYear = dob.slice(0,4)-1900;  
-        var dobMonth = dob.slice(5,7);  
-        var dobDate = dob.slice(8,10);  
+    //     var dobYear = dob?.slice(0,4)-1900;  
+    //     var dobMonth = dob?.slice(5,7);  
+    //     var dobDate = dob?.slice(8,10);  
  
           
-        //get the current date from the system  
-        var now = new Date();  
-        //extract the year, month, and date from current date  
-        var currentYear = now.getYear();  
-        var currentMonth = now.getMonth()+1;  
-        var currentDate = now.getDate();  
+    //     //get the current date from the system  
+    //     var now = new Date();  
+    //     //extract the year, month, and date from current date  
+    //     var currentYear = now.getYear();  
+    //     var currentMonth = now.getMonth()+1;  
+    //     var currentDate = now.getDate();  
           
         
-        //declare a variable to collect the age in year, month, and days  
-        var age = {};  
-        var ageString = "";  
+    //     //declare a variable to collect the age in year, month, and days  
+    //     var age = {};  
+    //     var ageString = "";  
         
-        //get years  
-       var yearAge = currentYear - dobYear;  
+    //     //get years  
+    //    var yearAge = currentYear - dobYear;  
 
 
-        //get months  
-        if (currentMonth >= dobMonth)  
-          //get months when current month is greater  
-          var monthAge = currentMonth - dobMonth;  
-        else {  
-          yearAge--;  
-          var monthAge = 12 + currentMonth - dobMonth;  
-        }  
+    //     //get months  
+    //     if (currentMonth >= dobMonth)  
+    //       //get months when current month is greater  
+    //       var monthAge = currentMonth - dobMonth;  
+    //     else {  
+    //       yearAge--;  
+    //       var monthAge = 12 + currentMonth - dobMonth;  
+    //     }  
 
       
-        //get days  
-        if (currentDate >= dobDate)  
-          //get days when the current date is greater  
-          var dateAge = currentDate - dobDate;  
-        else {  
-          monthAge--;  
-          var dateAge = 31 + currentDate - dobDate;  
+    //     //get days  
+    //     if (currentDate >= dobDate)  
+    //       //get days when the current date is greater  
+    //       var dateAge = currentDate - dobDate;  
+    //     else {  
+    //       monthAge--;  
+    //       var dateAge = 31 + currentDate - dobDate;  
       
-          if (monthAge < 0) {  
-            monthAge = 11;  
-            yearAge--;  
-          }  
-        }  
-        //group the age in a single variable  
-        age = {  
-        years: yearAge,  
-        months: monthAge,  
-        days: dateAge  
-        };  
+    //       if (monthAge < 0) {  
+    //         monthAge = 11;  
+    //         yearAge--;  
+    //       }  
+    //     }  
+    //     //group the age in a single variable  
+    //     age = {  
+    //     years: yearAge,  
+    //     months: monthAge,  
+    //     days: dateAge  
+    //     };  
             
             
-        if ( (age.years > 0) && (age.months > 0) && (age.days > 0) )  
-           ageString = age.years + " years, " + age.months + " months, and " + age.days + " days old.";  
-        else if ( (age.years == 0) && (age.months == 0) && (age.days > 0) )  
-           ageString = "Only " + age.days + " days old!";  
-        //when current month and date is same as birth date and month  
-        else if ( (age.years > 0) && (age.months == 0) && (age.days == 0) )  
-            ageString = age.years +  " years old. Happy Birthday!!";  
-        else if ( (age.years > 0) && (age.months > 0) && (age.days == 0) )  
-            ageString = age.years + " years and " + age.months + " months old.";  
-        else if ( (age.years == 0) && (age.months > 0) && (age.days > 0) )  
-            ageString = age.months + " months and " + age.days + " days old.";  
-        else if ( (age.years > 0) && (age.months == 0) && (age.days > 0) )  
-            ageString = age.years + " years, and" + age.days + " days old.";  
-        else if ( (age.years == 0) && (age.months > 0) && (age.days == 0) )  
-            ageString = age.months + " months old.";  
-        //when current date is same as dob(date of birth)  
-        else ageString = "";
-        return ageString ;
-    }
+    //     if ( (age.years > 0) && (age.months > 0) && (age.days > 0) )  
+    //        ageString = age.years + " years, " + age.months + " months, and " + age.days + " days old.";  
+    //     else if ( (age.years == 0) && (age.months == 0) && (age.days > 0) )  
+    //        ageString = "Only " + age.days + " days old!";  
+    //     //when current month and date is same as birth date and month  
+    //     else if ( (age.years > 0) && (age.months == 0) && (age.days == 0) )  
+    //         ageString = age.years +  " years old. Happy Birthday!!";  
+    //     else if ( (age.years > 0) && (age.months > 0) && (age.days == 0) )  
+    //         ageString = age.years + " years and " + age.months + " months old.";  
+    //     else if ( (age.years == 0) && (age.months > 0) && (age.days > 0) )  
+    //         ageString = age.months + " months and " + age.days + " days old.";  
+    //     else if ( (age.years > 0) && (age.months == 0) && (age.days > 0) )  
+    //         ageString = age.years + " years, and" + age.days + " days old.";  
+    //     else if ( (age.years == 0) && (age.months > 0) && (age.days == 0) )  
+    //         ageString = age.months + " months old.";  
+    //     //when current date is same as dob(date of birth)  
+    //     else ageString = "";
+    //     return ageString ;
+    // }
     
     const downloadImage = () => {
         saveAs(image, 'image.jpg') // Put your image url here.
       }
     //  var vis = {visibility:"hidden"}
     
-    function ChangeFormateDate(date){
-        var p = date.split(/\D/g)
-        return [p[2],p[1],p[0] ].join("/")
-     }
+    // function ChangeFormateDate(date){
+    //     var p = date.split(/\D/g)
+    //     return [p[2],p[1],p[0] ].join("/")
+    //  }
      var x =  moment().format('LLLL');
      var displayDate = x;
       
-    var age_c  = getAge(DOB); 
-    if(age_c == ""){
-            age_c = Age     ; 
-    }
+    // var age_c  = getAge(DOB); 
+    // if(age_c == ""){
+    //         age_c = Age     ; 
+    // }
 
 
     return (
         <>
-         <NavbarComponent />
-         
+        <NavbarComponent />
+       
         <div className="prescription-view" >
-
+        <div style={{textAlign:"center",marginTop:"10px"}}>
+            <Badge badgeContent="Edit In Progress" color="primary"><Button size='small' color="primary" textAlign="center">Prescription ID: {pres.pid}</Button></Badge>
+        </div> 
             <section id = "Page" className ="page"  ref={ref} >
-           
-            <section>
-            <Grid container spacing={2}>
-                <Grid item xs={8}>
-                    <Draggable>
-                        <img width="400px" src={aakar} alt="Aakar Clinic" />
-                    </Draggable>
-                </Grid>
-                <Grid item xs={4}>
-                    <Draggable>
-                    {
-                            file !== null ? 
-                            (
-                                <>
-                                <img src={file} style={{width:"140px"}} alt="" /> 
-                                </>
-                            ) : 
-                            (
-                                <>
-                                <img src={imageURL} style={{width:"140px"}} alt="" /> 
-                                </>
-                            )
-                    }  
-                    </Draggable>
-                </Grid>
-            </Grid>
-            <br />
 
+            <section>
+             
+            <Draggable>
+            <div style={{textAlign:"center",display:"flex",justifyContent:"center"}}><img width="100px" src={aakar} className="aakar-logo" alt="Aakar Clinic" /> </div>
+            </Draggable>
         
             {/* <CsvDownload 
     data={ p_data}
@@ -259,11 +243,23 @@ const Preview = ({imageURL}) => {
             </section> */}
             {/* <h2 class="prescription-heading">Prescription</h2> */}
             {/* <Draggable style={{textAlign:"center",border:"2px solid black"}}> */}
-         
+       {
+            // file !== null ? 
+            // (
+            //     <>
+            //     <img src={file} style={{width:"140px",position:"absolute",top:"355px",right:"400px"}} alt="" /> 
+            //     </>
+            // ) : 
+            // (
+            //     <>
+            //      <img src={imageURL} style={{width:"140px",position:"absolute",top:"355px",right:"400px"}} alt="" /> 
+            //     </>
+            // )
+       }      
            {/* </Draggable> */}
             <section class="patient-profile">
                
- 
+
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={0} >
                     <Grid item xs={6} >
@@ -273,29 +269,29 @@ const Preview = ({imageURL}) => {
                         <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Payment Receipt No. : &nbsp; </b> W-{JSON.parse(localStorage.getItem('counter'))+2000}/2022</Paper>
                     </Grid>
                     <Grid item xs={6} >
-                        <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Visit_No :</b> &nbsp;&nbsp; {Visit_No}  </Paper>
+                        <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Visit_No :</b> &nbsp;&nbsp; {pres.visit_no}  </Paper>
                     </Grid>
                     <Grid item xs={6} >
-                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Moblie No :</b> &nbsp;&nbsp;{m_num} </Paper> 
+                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Moblie No :</b> &nbsp;&nbsp;{pres.mobile_number} </Paper> 
                     </Grid>
                     <Grid item xs={12} >
-                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Name : </b> &nbsp;&nbsp; {Name}  </Paper>
+                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Name : </b> &nbsp;&nbsp; {pres.name}  </Paper>
                     </Grid>
                     <Grid item xs={6} >
-                        <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Age : </b> &nbsp;&nbsp;{Age}  </Paper>
+                        <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Age : </b> &nbsp;&nbsp;{pres.age}  </Paper>
                     </Grid>
 
                     <Grid item xs={6} >
-                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Sex : </b> &nbsp;&nbsp;{Sex}  </Paper>
+                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Sex : </b> &nbsp;&nbsp;{pres.sex}  </Paper>
                     </Grid>
                     <Grid item xs={12} >
-                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Address : </b> &nbsp;&nbsp;{Address}  </Paper>
+                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Address : </b> &nbsp;&nbsp;{pres.address}  </Paper>
                     </Grid>
                     <Grid item xs={12}>
-                    <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Diagnosis : </b> &nbsp;&nbsp;{Diagnosis}  </Paper>
+                    <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Diagnosis : </b> &nbsp;&nbsp;{pres.diagnosis}  </Paper>
                     </Grid>
                     <Grid item xs={12}>
-                    <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Goal for next month : </b> &nbsp;&nbsp;{Goal} </Paper>  
+                    <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Goal for next month : </b> &nbsp;&nbsp;{pres.goal_for_next_month} </Paper>  
                     </Grid>
                 </Grid>
             </Box>
@@ -304,7 +300,7 @@ const Preview = ({imageURL}) => {
             
             </section>
             {
-                prescription.length === 0 ? (
+                pres.prescription.length === 0 ? (
                     <></>
                 )  : (
                     <section>          
@@ -312,7 +308,7 @@ const Preview = ({imageURL}) => {
                     <div style={{textAlign:"center",color:"brown",fontSize:"14px"}}><b>PRESCRIPTION</b></div>
                     <b ><p style={{fontSize:"11px"}}> (Join parent support group and read more about Goal Directed Cognitive Approach at <a href="http://www.neuropediatrician.com">www.neuropediatrician.com</a>)</p></b>
        
-                       <ul> {prescription?.map((p)=>{
+                       <ul> {pres.prescription?.map((p)=>{
                                return(
                                    <li>{p}</li>
                                )
@@ -323,14 +319,13 @@ const Preview = ({imageURL}) => {
                    </section>
                 )
             }
-          
 <br />
-            <section className="description">
+              <section className="description">
                   <Draggable>    
 
   
                <p className="textArea" >
-               {Description}
+               {pres.description}
                </p>
                </Draggable>     
                 <br /> 
@@ -364,7 +359,7 @@ const Preview = ({imageURL}) => {
                         <Draggable>
                             <section>
                                 <br/>
-                                <p><strong>Payment Receipt : </strong> {Receipt}</p>
+                                <p><strong>Payment Receipt : </strong> {pres.payment_receipt}</p>
                             </section>
                         </Draggable>
                     </Grid>
@@ -375,8 +370,6 @@ const Preview = ({imageURL}) => {
                         </Draggable>
                     </Grid>
                  </Grid>
-                 
-
             </section>
             </section>
             </section>

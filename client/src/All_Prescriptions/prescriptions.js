@@ -12,6 +12,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import {IconButton} from '@material-ui/core';
 import axios from 'axios'
 import { Badge } from 'reactstrap';
+import NavbarComponent from "../NavbarComponent"
+
 
 const Prescriptions = () => {
     
@@ -19,11 +21,11 @@ const Prescriptions = () => {
   
     const [prescriptions,setPrescriptions] = useState([]);
    
-    useEffect(()=>{
-        axios.get('https://aakar-clinic.onrender.com/all')
-        .then(response => setPrescriptions(response.data)  );
-        
+    useEffect(async ()=>{
+        await axios.get('https://aakar-clinic.onrender.com/all')
+        .then(response => setPrescriptions(response.data) );
     },[])
+    localStorage.setItem('all-prescriptions', JSON.stringify(prescriptions))
     const [p_name,setP_name] = useState('')
     const [p_id,setP_id] = useState('')
 
@@ -93,6 +95,7 @@ const Prescriptions = () => {
    
     return (
         <>
+        <NavbarComponent />
         <div style={{display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column"}}>
             
             <Paper style={{margin:"20px",padding:"10px"}}>
@@ -124,7 +127,7 @@ const Prescriptions = () => {
 
             <Badge style={{fontSize:"16px",borderBottom:"1px solid black"}}>All Prescriptions</Badge>
             </div>
-          
+            
             {
                 (!reset && (p_id !== '' || p_name !== '') ) ? (
            
@@ -151,7 +154,7 @@ const Prescriptions = () => {
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button size="small" href={`/all/${item1.pid}`}>View More</Button>
+                                        <Button size="small" href={`/all/prescriptions/${item1.pid}`}>View More</Button>
                                     </CardActions>
                                 </Card>
                             </>
@@ -181,7 +184,7 @@ const Prescriptions = () => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small" href={`/all/${prescription.pid}`} >View More</Button>
+                                    <Button size="small" href={`/all/prescriptions/${prescription.pid}`} >View More</Button>
                                 </CardActions>
                             </Card>
                         </>

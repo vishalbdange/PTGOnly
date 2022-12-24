@@ -12,27 +12,35 @@ import SearchIcon from '@mui/icons-material/Search';
 import {IconButton} from '@material-ui/core';
 import axios from 'axios'
 import { Badge } from 'reactstrap';
+import {useParams} from 'react-router-dom';
+import Preview from './Preview.js'
 
-const Prescription = ({match}) => {
+const Prescription = () => {
     
-    const pid = match.params.pid;
-    const [prescriptions,setPrescriptions] = useState([])
-    const [prescription,setPrescription] = useState({})
-    useEffect(()=>{
-        axios.get('https://aakar-clinic.onrender.com/all')
-        .then(response => setPrescriptions(response.data)  );
-        if (prescriptions.find((pr) => pr.pid === pid) !== undefined) {
-            setPrescription(prescriptions.find((pr) => pr.pid === pid))
-          }
-        console.log(prescription)
-    },[])
-   
+    const params = useParams();
+    console.log(params.pid)
+    const pid = params.pid;
+    var prescription = {};
+    // useEffect(()=>{
+    //     axios.get('https://aakar-clinic.onrender.com/all')
+    //     .then(response => setPrescriptions(response.data)  );
+    //     if (prescriptions.find((pr) => pr.pid === pid) !== undefined) {
+    //         setPrescription(prescriptions.find((pr) => pr.pid === pid))
+    //       }
+    //     console.log(prescription)
+    // },[window.onload])
+    const prescriptions = JSON.parse(localStorage.getItem('all-prescriptions'));
+    if (prescriptions.find((pr) => pr.pid === pid) !== undefined) {
+        prescription = prescriptions.find((pr) => pr.pid === pid)
+    }
+    console.log(prescription)   
     return (
-        <>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column"}}>
-            Prescription with ID : {pid}
+       
+        <div>
+            <br />
+            <Preview prescription={prescription} />
         </div>
-        </>
+       
     )
 }
 
