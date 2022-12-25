@@ -19,7 +19,7 @@ import CsvDownload from 'react-json-to-csv'
 import NavbarComponent from './NavbarComponent'
 import { Paper } from '@mui/material'
 const Preview = ({imageURL}) => {
-
+ 
 
     const state = JSON.parse(localStorage.getItem('state'));
     const prescription = JSON.parse(localStorage.getItem('prescription'));
@@ -79,13 +79,11 @@ const Preview = ({imageURL}) => {
         // localStorage.setItem('prescription_data', JSON.stringify(prescription_d))
         // p_data = prescription_d;
         if(window.innerWidth > 900){
-              
             setTextAreaStyle({width:"100%",border:"none",padding:"0%",margin:"0%",overflow:"hidden !important",maxHeight:"200px"})
         } 
         else if(window.innerWidth  < 900 &&  window.innerWidth > 510){  
             setTextAreaStyle({width:"100%",border:"none",padding:"0%",margin:"0%",overflow:"hidden !important",maxHeight:"400px"});
-        } 
-        
+        }
     })
     function getAge(dob) {
           

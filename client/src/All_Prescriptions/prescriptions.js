@@ -184,7 +184,7 @@ const Prescriptions = () => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small" href={`/all/prescriptions/${prescription.pid}`} >View More</Button>
+                                    <Button size="small" href={`/all/prescriptions/${prescription.pid}${JSON.parse(localStorage.getItem('counter'))+2000}`} >View More</Button>
                                 </CardActions>
                             </Card>
                         </>

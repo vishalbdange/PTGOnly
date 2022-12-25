@@ -5,11 +5,8 @@ import Section2  from './Sections/Section2'
 import Section3  from './Sections/Section3'
 import Section4  from './Sections/Section4'
 import  ScoreBoard  from './Sections/ScoreBoard'
-import AppContext from '../AppContext';
-import { initializeApp,RecaptchaVerifier  } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import  {getAuth} from "firebase/auth"
- 
+import NavbarComponent from '../NavbarComponent.js'
+import {Paper} from '@material-ui/core'
 // import Firebase from './firebase';
 import aakar from "../aakar.jpg"
 
@@ -247,9 +244,8 @@ const Form = () => {
     }
     return (
         <div >
-                <div style={{textAlign:"center",margin:"20px"}} >
-                        <img src={aakar} alt="aakar" className="aakar-logo"/>
-                </div>
+            <NavbarComponent />
+
                 {
                     scoreBoard ? 
                     (
@@ -262,11 +258,9 @@ const Form = () => {
                         {
                             atHome  ? (<>
                             <div style={{textAlign:"center",fontSize:"22px"}}>
-                              <Card color="info" >
-                                  <CardTitle style={{margin:"20px 10px !important"}}> 
+                              <Paper color="info" >
                                     Neuro Developmental Pediatrician Dr Kondekar Treatment for Autism ADHD Learning disability Epilepsy
-                              </CardTitle>
-                                </Card>
+                                </Paper>
                                 </div> <br />
                                 <div style={{textAlign:"center",fontSize:"20px"}}>
                                 <Badge color="danger" >
@@ -274,7 +268,7 @@ const Form = () => {
                                 </Badge>
                                 </div>
                             <form onSubmit={gotoAssesment} style={{padding:"20px 100px"}}>
-                            <FormGroup>
+                            <FormGroup style={{textAlign:"center"}}>
 
                             <Label for="exampleName" sm-2>
                                                     Enter Name : 
@@ -287,13 +281,13 @@ const Form = () => {
                                                            className="autInp"
                                                            onChange={handleChangeForm}
                                                            required
-                                                              style={{padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
+                                                              style={{ width:"200px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
                                                         
                                                            
                                                        />
                                                    </Col>
                             </FormGroup>
-                            <FormGroup>
+                            <FormGroup style={{textAlign:"center"}}>
                             <Label for="exampleAge" sm-2>
                                                     Enter Age : 
                                                    </Label>
@@ -305,11 +299,11 @@ const Form = () => {
                                                            className="autInp"
                                                            onChange={handleChangeForm}
                                                            required
-                                                              style={{padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
+                                                              style={{ width:"200px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
                                                        />
                                                    </Col>
                             </FormGroup>
-                            <FormGroup>
+                            <FormGroup style={{textAlign:"center"}}>
                             <Label for="exampleSex" sm-2>
                                                     Enter Sex : 
                                                    </Label>
@@ -321,11 +315,11 @@ const Form = () => {
                                                            className="autInp"
                                                            onChange={handleChangeForm}
                                                            required
-                                                              style={{padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
+                                                              style={{ width:"200px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
                                                        />
                                                    </Col>
                             </FormGroup>
-                            <FormGroup>
+                            <FormGroup style={{textAlign:"center"}}>
                             <Label for="exampleSex" sm-2>
                                                     Enter City : 
                                                    </Label>
@@ -337,12 +331,12 @@ const Form = () => {
                                                            className="autInp"
                                                            onChange={handleChangeForm}
                                                            required
-                                                              style={{padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
+                                                              style={{ width:"200px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
                                                        />
                                                    </Col>
                             </FormGroup>
-                            <FormGroup>
-                            <Label for="example" sm-2>
+                            <FormGroup style={{textAlign:"center"}}>
+                            <Label for="example" sm-2> 
                                                     Enter Mobile Number : 
                                                    </Label>
                                                    <Col sm-10>
@@ -354,12 +348,12 @@ const Form = () => {
                                                            className="autInp"
                                                            onChange={handleChangeForm}
                                                            required
-                                                              style={{padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
+                                                              style={{ width:"200px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
                                                        />
                                                    </Col>
                             </FormGroup>
-                            
-                            <Button type="submit">Go To Assesment</Button> 
+                            <div style={{textAlign:"center"}}> <Button type="submit">Go To Assesment</Button> </div>
+                           
                             </form>
                             </>) :
                         <>
@@ -370,19 +364,20 @@ const Form = () => {
                                 <>
                                     {
                                        !forgotPswd ? 
-                                            <div style={{padding:"20px 100px"}}>
+                                            <div style={{padding:"20px 100px",textAlign:"center"}}>
                                                 <p>Password is : www.pedneuro.in</p>
-                                                   <FormGroup row p-0 >
-                                                   <Label for="exampleSex" sm-2>
+                                                   <FormGroup >
+                                                   <Label for="exampleSex" >
                                                         Enter Password :
                                                    </Label>
-                                                   <Col sm-10>
+                                                   <Col  style={{textAlign:"center"}} >
                                                        <Input
                                                            id="password"
                                                            name="password"
                                                            type="text"
                                                            className="inp"
                                                            onChange={handleChangePassword}
+                                                          
                                                        />
                                                    </Col>
                                                </FormGroup>

@@ -19,7 +19,7 @@ const Prescription = () => {
     
     const params = useParams();
     console.log(params.pid)
-    const pid = params.pid;
+    const pid = (params.pid).slice(0,-4);
     var prescription = {};
     // useEffect(()=>{
     //     axios.get('https://aakar-clinic.onrender.com/all')
