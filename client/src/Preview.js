@@ -5,6 +5,8 @@ import TestPDF from './TestPDF'
 import { useScreenshot } from 'use-react-screenshot'
 import { saveAs } from 'file-saver'
 import sign from "./sign.png"
+
+import sign1 from "./sign1.png"
 import drskinfo from "./drskinfo.jpeg"
 import autism2 from "./autism2.jpeg"
 import doctorInfo from "./doctorInfo.jpeg"
@@ -18,15 +20,24 @@ import Box from '@mui/material/Box';
 import CsvDownload from 'react-json-to-csv'
 import NavbarComponent from './NavbarComponent'
 import { Paper } from '@mui/material'
+import Divider from '@mui/material/Divider';
+import CsvDownloadButton from 'react-json-to-csv'
+import {Link} from 'react-router-dom'
 const Preview = ({imageURL}) => {
  
 
-    const state = JSON.parse(localStorage.getItem('state'));
+    var state = JSON.parse(localStorage.getItem('state'));
     const prescription = JSON.parse(localStorage.getItem('prescription'));
         // console.log(state)
     // var p_data = [];
-    const { DOB, file,Visit_No,Name, Address,Age, Sex, Diagnosis,Goal,m_num,Receipt,Description,ImageFile} = state;
+    var prescription_string = ''
 
+    for (let p of prescription){
+        prescription_string = ' '+p + ''
+    }
+    const { DOB, file,Visit_No,Name, Address,Age, Sex, Diagnosis,Goal,m_num,Receipt,Description,ImageFile} = state;
+    // const csvData = {...state,prescription:prescription}
+    console.log(DOB)
 
     const exportPDF = () => {
         const input = document.getElementById("Page");
@@ -78,6 +89,8 @@ const Preview = ({imageURL}) => {
         // prescription_d.push(csvState);
         // localStorage.setItem('prescription_data', JSON.stringify(prescription_d))
         // p_data = prescription_d;
+        state.Prescription[0] = prescription_string;
+        console.log(state)
         if(window.innerWidth > 900){
             setTextAreaStyle({width:"100%",border:"none",padding:"0%",margin:"0%",overflow:"hidden !important",maxHeight:"200px"})
         } 
@@ -87,6 +100,9 @@ const Preview = ({imageURL}) => {
     })
     function getAge(dob) {
           
+        if(dob == ''){
+            return Age;
+        }   
         var dobYear = dob.slice(0,4)-1900;  
         var dobMonth = dob.slice(5,7);  
         var dobDate = dob.slice(8,10);  
@@ -151,7 +167,7 @@ const Preview = ({imageURL}) => {
         else if ( (age.years == 0) && (age.months > 0) && (age.days > 0) )  
             ageString = age.months + " months and " + age.days + " days old.";  
         else if ( (age.years > 0) && (age.months == 0) && (age.days > 0) )  
-            ageString = age.years + " years, and" + age.days + " days old.";  
+            ageString = age.years + " years, and " + age.days + " days old.";  
         else if ( (age.years == 0) && (age.months > 0) && (age.days == 0) )  
             ageString = age.months + " months old.";  
         //when current date is same as dob(date of birth)  
@@ -182,14 +198,15 @@ const Preview = ({imageURL}) => {
          <NavbarComponent />
          
         <div className="prescription-view" >
-
-            <section id = "Page" className ="page"  ref={ref} >
+        <CsvDownloadButton  data={[state]}/>
+        <Link to="/prescription">TO Prescription</Link>
+            <section id = "Page"  className ="page"  ref={ref }   >
            
-            <section>
-            <Grid container spacing={2}>
+
+            <Grid container spacing={0}>
                 <Grid item xs={8}>
                     <Draggable>
-                        <img width="400px" src={aakar} alt="Aakar Clinic" />
+                        <img width="340px" src={aakar} alt="Aakar Clinic" />
                     </Draggable>
                 </Grid>
                 <Grid item xs={4}>
@@ -198,20 +215,18 @@ const Preview = ({imageURL}) => {
                             file !== null ? 
                             (
                                 <>
-                                <img src={file} style={{width:"140px"}} alt="" /> 
+                                <img src={file} style={{width:"100px"}} alt="" /> 
                                 </>
                             ) : 
                             (
                                 <>
-                                <img src={imageURL} style={{width:"140px"}} alt="" /> 
+                                <img src={imageURL} style={{width:"100px"}} alt="" /> 
                                 </>
                             )
                     }  
                     </Draggable>
                 </Grid>
             </Grid>
-            <br />
-
         
             {/* <CsvDownload 
     data={ p_data}
@@ -259,76 +274,112 @@ const Preview = ({imageURL}) => {
             {/* <Draggable style={{textAlign:"center",border:"2px solid black"}}> */}
          
            {/* </Draggable> */}
-            <section class="patient-profile">
-               
- 
+           
+            <section class="patient-profile" style={{ backgroundImage: `url(${sign1})`}}>
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={0} >
-                    <Grid item xs={6} >
-                        <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Date</b> &nbsp;&nbsp; {displayDate }</Paper>
+                    <Grid item xs={3}  style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",borderTop:"1px solid #F6BE00",fontSize:"12px"}}>
+                        <b > &nbsp;&nbsp;Date</b> 
                     </Grid>
-                    <Grid item xs={6} >
-                        <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Payment Receipt No. : &nbsp; </b> W-{JSON.parse(localStorage.getItem('counter'))+2000}/2022</Paper>
+                  
+                    <Grid item xs={9}  style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",borderTop:"1px solid #F6BE00",fontSize:"12px"}}>
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{displayDate} 
                     </Grid>
-                    <Grid item xs={6} >
-                        <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Visit_No :</b> &nbsp;&nbsp; {Visit_No}  </Paper>
+                   
+                    {/* <Grid item xs={6} >
+                        <b > &nbsp;&nbsp;Payment Receipt No. : &nbsp; </b> W-{JSON.parse(localStorage.getItem('counter'))+2000}/2022
+                    </Grid> */}
+                    <Grid item xs={3}  style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}}>
+                        <b> &nbsp;&nbsp;Visit_No </b>   
                     </Grid>
-                    <Grid item xs={6} >
-                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Moblie No :</b> &nbsp;&nbsp;{m_num} </Paper> 
+                    <Grid item xs={9}  style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}}>
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{Visit_No}  
                     </Grid>
-                    <Grid item xs={12} >
-                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Name : </b> &nbsp;&nbsp; {Name}  </Paper>
+                    <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;ID </b>   
                     </Grid>
-                    <Grid item xs={6} >
-                        <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Age : </b> &nbsp;&nbsp;{Age}  </Paper>
+                    <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{m_num}  
                     </Grid>
-
-                    <Grid item xs={6} >
-                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Sex : </b> &nbsp;&nbsp;{Sex}  </Paper>
+                    <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;Age</b>   
                     </Grid>
-                    <Grid item xs={12} >
-                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Address : </b> &nbsp;&nbsp;{Address}  </Paper>
+                    <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{age_c}  
                     </Grid>
-                    <Grid item xs={12}>
-                    <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Diagnosis : </b> &nbsp;&nbsp;{Diagnosis}  </Paper>
+                   
+                    <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;Name </b>   
                     </Grid>
-                    <Grid item xs={12}>
-                    <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Goal for next month : </b> &nbsp;&nbsp;{Goal} </Paper>  
+                    <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{Name}  
                     </Grid>
+                   
+                    <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;DOB </b>   
+                    </Grid>
+                    <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{DOB}  
+                    </Grid>
+                   
+                    <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;Sex </b>   
+                    </Grid>
+                    <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{Sex}  
+                    </Grid>
+                   
+                    <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;Address </b>   
+                    </Grid>
+                    <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{Address}  
+                    </Grid>
+                   
+                    <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;Diagnosis </b>   
+                    </Grid>
+                    <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{Diagnosis}  
+                    </Grid>
+                   
+                    <Grid item xs={3} style={{borderBottom:"1px solid #F6BE00",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;Goal for next month </b>   
+                    </Grid>
+                    <Grid item xs={9} style={{borderBottom:"1px solid #F6BE00",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp;{Goal}  
+                    </Grid>
+                   
                 </Grid>
             </Box>
         
            
-            
+            <hr/>
             </section>
+          
             {
                 prescription.length === 0 ? (
                     <></>
                 )  : (
-                    <section>          
-                    <div>
-                    <div style={{textAlign:"center",color:"brown",fontSize:"14px"}}><b>PRESCRIPTION</b></div>
-                    <b ><p style={{fontSize:"11px"}}> (Join parent support group and read more about Goal Directed Cognitive Approach at <a href="http://www.neuropediatrician.com">www.neuropediatrician.com</a>)</p></b>
+                   <>
+                        
+                    <div ><b>Prescription : </b></div>
+                    <b><p style={{fontSize:"10px"}}> (Join parent support group and read more about Goal Directed Cognitive Approach at <a href="http://www.neuropediatrician.com">www.neuropediatrician.com</a>)</p></b>
        
                        <ul> {prescription?.map((p)=>{
                                return(
-                                   <li>{p}</li>
+                                   <li style={{fontSize:"12px"}}>{p}</li>
                                )
                        })}</ul >
-                   </div>
-                       
-                   <br />
-                   </section>
+                   </>
                 )
             }
-          
-<br />
-            <section className="description">
+            <section  style={{fontSize:"9px !important"}}>
                   <Draggable>    
 
   
-               <p className="textArea" >
-               {Description}
+               <p  style={{fontSize:"11px"}}>
+                   <b>{Description}</b> 
                </p>
                </Draggable>     
                 <br /> 
@@ -339,11 +390,10 @@ const Preview = ({imageURL}) => {
                  
                 </div>
                 </Draggable>
-                <Draggable style={{margin:"0px !important",padding:"0px !important",width:"80px !important"}}>
-                <div style={{height:"100px",margin :"0px !important",paddingLeft:"50px",maxWidth:"100px !important"}}>
+                <Draggable style={{margin:"0px !important",padding:"0px !important",width:"80px !important"}}> 
                 <img  style={{height:"40px",margin:"0px !important",padding:"0px !important"}}  src={autism2} alt='drskinfo' />                 
-                </div>
                 </Draggable>
+                <br/>
                 <Draggable>
                     <div className="Desc">
                 <p className="textArea" style={{color:"#338BA8"}}>
@@ -362,9 +412,12 @@ const Preview = ({imageURL}) => {
                         <Draggable>
                             <section>
                                 <br/>
-                                <p><strong>Payment Receipt : </strong> {Receipt}</p>
+                                <p><strong>Payment Receipt No. : </strong> W-{JSON.parse(localStorage.getItem('counter'))+2000}/2022</p>
+                                <p><strong>Payment Receipt :  </strong> {Receipt}</p>
                             </section>
+                            
                         </Draggable>
+                      
                     </Grid>
                                       
                     <Grid item xs={6}>
@@ -373,10 +426,10 @@ const Preview = ({imageURL}) => {
                         </Draggable>
                     </Grid>
                  </Grid>
-                 
+
 
             </section>
-            </section>
+            
             </section>
             <section className="screenshot-capture" style={{padding:"4px"}}>
                 <Button color="primary" onClick={getImage} style={{height:"35px",margin:"15px"}}>

@@ -18,6 +18,24 @@ import CsvDownload from 'react-json-to-csv'
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
+import { IconButton } from '@mui/material'
+import EditIcon from '@mui/icons-material/Edit';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import CsvDownloadButton from 'react-json-to-csv'
+import {ArrowCircleDown,ArrowCircleUp} from '@mui/icons-material';
+import {FormControl,InputLabel,Select,MenuItem} from '@material-ui/core'
+import axios from 'axios'
+
+
+
+const prescription_Items = require('../prescription_Items').prescription_Items;
+
+
 
 const Preview = (prop) => {
 
@@ -26,6 +44,22 @@ const Preview = (prop) => {
    const pres = prop.prescription;
    console.log(pres)
     
+   const [presEdited, setPresEdited] = useState({
+        pid:pres.mobile_no,
+        dob: pres.dob,
+        visit_no: pres.visit_no,
+        name : pres.name,
+        address: pres.address,
+        age : pres.age,
+        sex : pres.sex, 
+        mobile_no : pres.mobile_no,
+        diagnosis :pres.diagnosis,
+        goal_for_next_month : pres.goal_for_next_month,
+        prescription: pres.prescription,
+        payment_receipt : pres.payment_receipt,
+        description : pres.description  
+    });
+
     // console.log(prescription)
     // const state = JSON.parse(localStorage.getItem('state'));
     // const prescription = JSON.parse(localStorage.getItem('prescription'));
@@ -64,10 +98,10 @@ const Preview = (prop) => {
     // const [textAreaStyle,setTextAreaStyle] = useState({width:"100%",border:"none",padding:"0%",margin:"0%"});
      useEffect (() => {
         var count = JSON.parse(localStorage.getItem('counter') || 0);
-      
+        setValues({val:pres.prescription})
         localStorage.setItem('counter', ++count)
         console.log(JSON.parse(localStorage.getItem('counter')))
-    },[window.unload])
+    },[])
  
    
     useEffect(() => {
@@ -181,15 +215,272 @@ const Preview = (prop) => {
     // if(age_c == ""){
     //         age_c = Age     ; 
     // }
+    const [editDialogue,setEditDialogue] = useState(false);
+    const handleEditPrescription = () =>{
+        console.log("Inside edit prescription")
+        setOpen(true);
+        setEditDialogue(true);
+    }
+    const [open, setOpen] = React.useState(false);
 
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const [values, setValues] = useState({ val: [] });
+
+    function createInputs() {
+        return values.val.map((el, i) =>
+            <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={() => moveUp(i)}
+                color="inherit"
+                >
+                    <ArrowCircleUp />
+                </IconButton>
+                <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={() => moveDown(i)}
+                color="inherit"
+                >
+                    <ArrowCircleDown />
+                </IconButton>
+                {/* <Input type='button' style={{ width: "60px", borderRadius: "10%", margin: "10px" }} value='Up' onClick={() => moveUp(i)} /> */}
+                <Input type="text" value={el || ''} style={{ margin: "10px", width: "400px" }} onChange={e => { handleChangeList(e, i) }} />
+                <Input type='button' style={{ width: "60px", borderRadius: "10%", margin: "10px" }} value='X' onClick={() => removeClick(i)} />
+            </div>
+        );
+    }
+
+    function handleChangeList(e, i) {
+        let vals = [...values.val];
+        vals[i] = e.target.value;
+        setValues({ val: vals });
+    }
+
+    function moveUp(i){
+        console.log(i)
+        let vals = [...values.val]
+        var temp = vals[i];
+        console.log(vals[i])
+        console.log(vals[i-1])
+        if(i>0){
+            vals[i]=vals[i-1];
+            vals[i-1]=temp;
+        }
+        setValues({ val: vals });
+    }
+    function moveDown(i){
+        console.log(i)
+        let vals = [...values.val]
+        let n = vals.length;
+        var temp = vals[i];
+        console.log(vals[i])
+        console.log(vals[i+1])
+        if(i<n-1){
+            vals[i]=vals[i+1];
+            vals[i+1]=temp;
+        }
+        setValues({ val: vals });
+    }
+    const addClick = (text) => {
+        setValues({ val: [...values.val, text] })
+    }
+ 
+
+    const removeClick = (i) => {
+        let vals = [...values.val];
+        vals.splice(i, 1);
+        console.log(vals)
+        setValues({ val: vals });
+    }
+    const handleChangeEdit = (e) =>{
+
+        const name = e.target.name;
+        const value =  e.target.value;
+        console.log(name + ' ' +  value)
+        // if(name == 'pid' ||  name == 'mobile_number'){
+        //     setPresEdited({ ...presEdited, 'pid': value })
+        //     setPresEdited({ ...presEdited, 'mobile_number': value })
+        // }
+        setPresEdited({ ...presEdited, [name]: value })
+    }
+    const handleSubmitEdit = () =>{
+
+        console.log(presEdited)
+        axios.put(`http://localhost:5000/all/prescriptions/${pres.pid}-${pres.name}`, presEdited)
+        handleClose();
+    }
 
     return (
         <>
         <NavbarComponent />
-       
+        
         <div className="prescription-view" >
+        <CsvDownloadButton data={pres}/>
         <div style={{textAlign:"center",marginTop:"10px"}}>
-            <Badge badgeContent="Edit In Progress" color="primary"><Button size='small' color="primary" textAlign="center">Prescription ID: {pres.pid}</Button></Badge>
+            <h4 style={{color:"blue"}}>(Edit here)
+           <IconButton
+                    size="large"
+                    aria-label="Edit"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleEditPrescription}
+                    color="primary"
+                    label="Edit"
+                    >
+                    <EditIcon />
+            </IconButton>
+            </h4>
+            <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle>Edit Prescription</DialogTitle>
+                <DialogContent>
+                <TextField
+                    autoFocus
+                    onChange={(e)=> handleChangeEdit(e)}
+                    defaultValue={pres.name}
+                    margin="dense"
+                    name="name"
+                    id="name"
+                    label="Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    autoFocus
+                    onChange={(e)=> handleChangeEdit(e)}
+                    defaultValue={pres.diagnosis}
+                    margin="dense"
+                    name="diagnosis"
+                    id="diagnosis"
+                    label="Diagnosis"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    autoFocus
+                    onChange={( e)=> handleChangeEdit(e)}
+                    defaultValue={pres.address}
+                    margin="dense"
+                    name="address"
+                    id="address"
+                    label="Address"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    autoFocus
+                    onChange={(e)=> handleChangeEdit(e)}
+                    defaultValue={pres.pid}
+                    margin="dense"
+                    name="pid"
+                    id="pid"
+                    label="Mobile Number"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    autoFocus
+                    onChange={(e)=> handleChangeEdit(e)}
+                    margin="dense"
+                    defaultValue={pres.goal_for_next_month}
+                    name="goal_for_next_month"
+                    id="goal_for_next_month"
+                    label="Goal_for_next_month"
+                    type="text"
+                    fullWidth
+                    placeholder='Goal for next month'
+                    variant="standard"
+                />
+                 <TextField
+                    autoFocus
+                    onChange={(e)=> handleChangeEdit(e)}
+                    defaultValue={pres.dob.slice(0,-14)}
+                    margin="dense"
+                    name="dob"
+                    id="dob"
+                    label="DOB"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    autoFocus
+                    onChange={(e)=> handleChangeEdit(e)}
+                    defaultValue={pres.visit_no}
+                    margin="dense"
+                    name="visit_no"
+                    id="visit_no"
+                    label="Visit_No"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    autoFocus
+                    onChange={(e)=> handleChangeEdit(e)}
+                    defaultValue={pres.age}
+                    margin="dense"
+                    name="age"
+                    id="age"
+                    label="Age"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    autoFocus
+                    onChange={(e)=> handleChangeEdit(e)}
+                    defaultValue={pres.sex}
+                    margin="dense"
+                    name="sex"
+                    id="sex"
+                    label="Sex"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                />
+                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                            {createInputs()}
+                            <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-around"}}>
+                                <Input type='button' value='+ Add Prescription ' onClick={() => addClick('')} style={{ marginBottom: "10px",marginRight:"15px", width: "300px" }} />
+                                <Badge badgeContent="New" color="primary">
+                                <Select    
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select" 
+                                    value='All'
+                                    label='All'
+                                    style={{padding:"2px",backgroundColor:"white"}}
+                                    
+                                >
+                                    {prescription_Items.map((p_item,key) => {
+                                        return(<>
+                                        
+                                            <MenuItem onClick={() => addClick({p_item}.p_item)} style={{ width: "500px" }} >{p_item}</MenuItem>
+                                       
+                                        </>
+                                        )                                        
+                                    })}
+                                </Select>   
+                                </Badge>               
+                        </div>
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={handleSubmitEdit}>Submit</Button>
+                </DialogActions>
+            </Dialog>
         </div> 
             <section id = "Page" className ="page"  ref={ref} >
 
@@ -258,45 +549,86 @@ const Preview = (prop) => {
        }      
            {/* </Draggable> */}
             <section class="patient-profile">
-               
 
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={0} >
-                    <Grid item xs={6} >
-                        <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Date</b> &nbsp;&nbsp; {displayDate }</Paper>
+                    <Grid item xs={3}  style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",borderTop:"1px solid #F6BE00",fontSize:"12px"}}>
+                        <b > &nbsp;&nbsp;Date</b> 
                     </Grid>
-                    <Grid item xs={6} >
-                        <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Payment Receipt No. : &nbsp; </b> W-{JSON.parse(localStorage.getItem('counter'))+2000}/2022</Paper>
+                  
+                    <Grid item xs={9}  style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",borderTop:"1px solid #F6BE00",fontSize:"12px"}}>
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{displayDate} 
                     </Grid>
-                    <Grid item xs={6} >
-                        <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Visit_No :</b> &nbsp;&nbsp; {pres.visit_no}  </Paper>
+                   
+                    {/* <Grid item xs={6} >
+                        <b > &nbsp;&nbsp;Payment Receipt No. : &nbsp; </b> W-{JSON.parse(localStorage.getItem('counter'))+2000}/2022
+                    </Grid> */}
+                    <Grid item xs={3}  style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}}>
+                        <b> &nbsp;&nbsp;Visit_No </b>   
                     </Grid>
-                    <Grid item xs={6} >
-                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Moblie No :</b> &nbsp;&nbsp;{pres.mobile_number} </Paper> 
+                    <Grid item xs={9}  style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}}>
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{pres.visit_no}  
                     </Grid>
-                    <Grid item xs={12} >
-                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Name : </b> &nbsp;&nbsp; {pres.name}  </Paper>
+                      
+                    <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;ID </b>   
                     </Grid>
-                    <Grid item xs={6} >
-                        <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Age : </b> &nbsp;&nbsp;{pres.age}  </Paper>
+                    <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{pres.moblie_number}  
                     </Grid>
-
-                    <Grid item xs={6} >
-                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Sex : </b> &nbsp;&nbsp;{pres.sex}  </Paper>
+                      
+                    <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;Age</b>   
                     </Grid>
-                    <Grid item xs={12} >
-                    <Paper style={{padding:"2px",margin:"3px"}}> <b style={{color:"brown"}}>Address : </b> &nbsp;&nbsp;{pres.address}  </Paper>
+                    <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{pres.age}  
                     </Grid>
-                    <Grid item xs={12}>
-                    <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Diagnosis : </b> &nbsp;&nbsp;{pres.diagnosis}  </Paper>
+                   
+                    <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;Name </b>   
                     </Grid>
-                    <Grid item xs={12}>
-                    <Paper style={{padding:"2px",margin:"3px"}}><b style={{color:"brown"}}>Goal for next month : </b> &nbsp;&nbsp;{pres.goal_for_next_month} </Paper>  
+                    <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{pres.name}  
                     </Grid>
+                   
+                    <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;DOB </b>   
+                    </Grid>
+                    <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{pres.dob.slice(0,-14)}  
+                    </Grid>
+                   
+                    <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;Sex </b>   
+                    </Grid>
+                    <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{pres.sex}  
+                    </Grid>
+                   
+                    <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;Address </b>   
+                    </Grid>
+                    <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{pres.address}  
+                    </Grid>
+                   
+                    <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;Diagnosis </b>   
+                    </Grid>
+                    <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{pres.diagnosis}  
+                    </Grid>
+                   
+                    <Grid item xs={3} style={{borderBottom:"1px solid #F6BE00",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
+                        <b > &nbsp;&nbsp;Goal for next month </b>   
+                    </Grid>
+                    <Grid item xs={9} style={{borderBottom:"1px solid #F6BE00",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
+                    &nbsp;&nbsp; &nbsp;&nbsp;{pres.goal_for_next_month}  
+                    </Grid>
+                   
                 </Grid>
             </Box>
         
-           
             
             </section>
             {
@@ -352,6 +684,7 @@ const Preview = (prop) => {
                 <p style={{margin:"0px",padding:"0px",fontSize:"12px"}}>AAKAAR CLINIC OPP BYCULLA STATION WEST MUMBAI 400024 INDIA   </p>
                  </b>
                  </div>
+
                  </Draggable>
                  <Grid container spacing={2}>
                   

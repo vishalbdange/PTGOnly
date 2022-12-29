@@ -19,7 +19,9 @@ const Prescription = () => {
     
     const params = useParams();
     console.log(params.pid)
-    const pid = (params.pid).slice(0,-4);
+    var pname = (params.pid).split('-')[1];
+    
+    const pid = (params.pid).split('-')[0];
     var prescription = {};
     // useEffect(()=>{
     //     axios.get('https://aakar-clinic.onrender.com/all')
@@ -30,9 +32,16 @@ const Prescription = () => {
     //     console.log(prescription)
     // },[window.onload])
     const prescriptions = JSON.parse(localStorage.getItem('all-prescriptions'));
-    if (prescriptions.find((pr) => pr.pid === pid) !== undefined) {
-        prescription = prescriptions.find((pr) => pr.pid === pid)
+    if(pid !== ''){
+        if (prescriptions.find((pr) => pr.pid === pid) !== undefined) {
+            prescription = prescriptions.find((pr) => pr.pid === pid)
+        }
+    }else{
+        if (prescriptions.find((pr) => pr.name === pname) !== undefined) {
+            prescription = prescriptions.find((pr) => pr.name === pname)
+        }
     }
+
     console.log(prescription)   
     return (
        

@@ -33,6 +33,22 @@ app.get('/all',async (req,res)=>{
     return sample;
 })
 
+app.put('/all/prescriptions/:id',async (req,res)=>{
+    const {id} = req.body.name;
+    console.log("All request received")
+    console.log(req.body)
+
+    const updatedPres = await Prescription.findOneAndReplace(id, req.body, { new: true });
+    updatedPres.save();
+    console.log(updatedPres)
+    return res.send("updatedPres");
+
+    // var sample = await Prescription.find();
+    // console.log(sample)
+    // res.status(200).json(sample)
+    // return sample;
+})
+
 
 app.post('/prescription',(req,res)=>{
     

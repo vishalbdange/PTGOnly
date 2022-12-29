@@ -140,10 +140,11 @@ const NavbarComponent = () => {
                     sx={{
                         display: { xs: 'block', md: 'none' },
                     }}
+                    style={{color:"black"}}
                     >
                      <Button
                         key='home'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        sx={{ my: 2, display: 'block' }}
                         href='/'
                     >
                        Home
@@ -151,42 +152,42 @@ const NavbarComponent = () => {
 
                     <Button
                         key='prescription'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        sx={{ my: 2, display: 'block' }}
                         href='/prescription'
                     >
                        Prescription
                     </Button>
                     <Button
                         key='all'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        sx={{ my: 2, display: 'block' }}
                         href='/all'
                     >
                        All
                     </Button>
                     <Button
                         key='form1'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        sx={{ my: 2, display: 'block' }}
                         href='/form1'
                     >
                        form1
                     </Button>
                     <Button
                         key='cars'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        sx={{ my: 2, display: 'block' }}
                         href='/cars'
                     >
                        Cars
                     </Button>
                     <Button
                         key='form2'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        sx={{ my: 2, display: 'block' }}
                         href='/form2'
                     >
                        form2
                     </Button>
                     <Button
                         key='autism-score'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        sx={{ my: 2, display: 'block' }}
                         href='/autism-score'
                     >
                        Autism-Score

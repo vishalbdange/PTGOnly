@@ -6,9 +6,10 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import { Input, Paper } from '@material-ui/core';
+import { Input, Paper,FormGroup } from '@material-ui/core';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
+import {Label} from 'reactstrap'
 import {IconButton} from '@material-ui/core';
 import axios from 'axios'
 import { Badge } from 'reactstrap';
@@ -22,7 +23,7 @@ const Prescriptions = () => {
     const [prescriptions,setPrescriptions] = useState([]);
    
     useEffect(async ()=>{
-        await axios.get('https://aakar-clinic.onrender.com/all')
+        await axios.get('http://localhost:5000/all')
         .then(response => setPrescriptions(response.data) );
     },[])
     localStorage.setItem('all-prescriptions', JSON.stringify(prescriptions))
@@ -33,9 +34,9 @@ const Prescriptions = () => {
     const [reset,setReset] = useState(true)
 
     console.log(prescriptions)
+
     const handleOnSearch = () =>{
         console.log("Providing your search results")
-       
     }
     const handleChange = (e) =>{
         console.log(prescriptions)
@@ -47,7 +48,6 @@ const Prescriptions = () => {
         }
         console.log(p_id)
         console.log(p_name)
-
     }
     const searchItems = () => {
         // console.log(p_id)
@@ -91,11 +91,39 @@ const Prescriptions = () => {
         setP_name('')
     }
 
-    
-   
+    const [enterPswd,setEnterPswd] = useState(true)
+   const onHandleChangePswd = (e) => {
+        if(e.target.value == '9064'){
+            setEnterPswd(false);
+        }
+   }
     return (
         <>
         <NavbarComponent />
+
+        { enterPswd ? (<div className="password-container">
+  
+                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", cborder: "2px solid black" }}>
+                            <Label for="exampleDate" >
+                                Enter Password :
+                            </Label>
+                        <FormGroup floating style={{ width: "400px", margin: "4px" }}>
+                            <Input
+                                id="examplepswd"
+                                name="pswd"
+                                placeholder="pswd"
+                                type="password"
+                                onChange={onHandleChangePswd}
+                                className="inp"
+                                required
+                            />
+                           
+                        </FormGroup>
+                    </div>
+                    
+
+                </div>) : (
+
         <div style={{display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column"}}>
             
             <Paper style={{margin:"20px",padding:"10px"}}>
@@ -166,6 +194,9 @@ const Prescriptions = () => {
                     prescriptions.map((prescription,key) => {
                     return(
                         <> 
+
+                 
+
                             <Card sx={{ width: 300}} style={{margin:"10px"}}>
                                 <CardContent>
                                     <Typography sx={{ mb: 1.5 }} variant="body2">
@@ -184,9 +215,10 @@ const Prescriptions = () => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small" href={`/all/prescriptions/${prescription.pid}${JSON.parse(localStorage.getItem('counter'))+2000}`} >View More</Button>
+                                    <Button size="small" href={`/all/prescriptions/${prescription.pid}-${prescription.name}`} >View More</Button>
                                 </CardActions>
                             </Card>
+                
                         </>
                     )
                 })
@@ -194,6 +226,7 @@ const Prescriptions = () => {
             }
             </Paper>
         </div>
+                )}
         </>
     )
 }

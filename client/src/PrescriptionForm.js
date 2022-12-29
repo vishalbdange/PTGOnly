@@ -19,13 +19,13 @@ const PrescriptionForm = ({ changeImgURL }) => {
     console.log(prescription_Items[0])     
     const navigate = useNavigate();
     const [state, setState] = useState({
-        DOB: new Date(Date.now()),
+        DOB: '',
         file: null,
         Visit_No: '',
         Name: '',
         Address: '',
         Age: '',
-        Sex: '',
+        Sex: 'Male',
         Diagnosis: '',
         Goal: '',
         m_num: '',
@@ -87,7 +87,8 @@ const PrescriptionForm = ({ changeImgURL }) => {
         // });
         axios({
             method: 'post',
-            url: 'https://aakar-clinic.onrender.com/prescription',
+            // url: 'https://aakar-clinic.onrender.com/prescription',
+            url: 'http://localhost:5000/prescription',
             data: state, // you are sending body instead
             headers: {
             'Content-Type': 'application/json'
@@ -203,7 +204,6 @@ const PrescriptionForm = ({ changeImgURL }) => {
         }
         const value = name == "ImageFile" ? e.target.files[0] : e.target.value;
 
-
         setState({ ...state, [name]: value })
 
     }
@@ -271,7 +271,6 @@ const PrescriptionForm = ({ changeImgURL }) => {
 
         <div className="PreForm">
             <NavbarComponent />
-            <div style={{ textAlign: "center", display: "flex", justifyContent: "center", padding: "20px" }}><img src={aakar} className="aakar-logo" alt="Aakar Clinic" /> </div>
             {/* {validateContent} */}
             {
                 enterPswd ? (<div className="password-container">

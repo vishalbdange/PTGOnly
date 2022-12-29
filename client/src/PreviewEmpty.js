@@ -95,6 +95,7 @@ const PreviewEmpty = ({ imageURL }) => {
                         </div>
                     </section>
                     <br /><br /><br />
+                    <p><b>Payment Receipt No. : </b>W-{JSON.parse(localStorage.getItem('counter'))+1000}/2022</p>
                     <section>
                         {
                            state.Certificate === '' ? (
@@ -106,9 +107,27 @@ const PreviewEmpty = ({ imageURL }) => {
                             <p>{state.Certificate}</p>
                             </>
                            )
-
-                            
-                           }
+                        }
+                        {
+                           state.textArea1 === '' ? (
+                             <></>
+                           ) : (
+                            <>
+                            <br />
+                                <p>{state.textArea1}</p>
+                            </>
+                           )
+                        }
+                        {
+                           state.textArea2 === '' ? (
+                             <></>
+                           ) : (
+                            <>
+                            <br />
+                            <p>{state.textArea2}</p>
+                            </>
+                           )
+                        }
                        
                     </section>
                     <br />
