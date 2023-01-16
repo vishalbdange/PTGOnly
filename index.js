@@ -78,7 +78,7 @@ app.post('/saveimg',async (req,res) =>{
     });
     var mailOptions = {
         from: "aakarclinic@gmail.com",
-        to: "dangebvishal@gmail.com",
+        to: "drkondekar@gmail.com",
         subject: `Aakar Clinic - ${name}'s Prescription - ${mobile_no}`,
         attachments : [
             {   // file on disk as an attachment
