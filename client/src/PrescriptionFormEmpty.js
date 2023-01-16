@@ -30,7 +30,8 @@ const PrescriptionFormEmpty = ({ changeImgURL }) => {
         Receipt: ' ',
         Certificate : '',
         textArea1 : '',
-        textArea : '',
+        textArea2 : '',
+        textArea3:'',
         Description: "For neurodevelopmental disorders and delays Daily Occupational Therapy,behaviour Therapy and Speech therapy is important to achieve milestones needed for activities of daily living and later control and regulation of sensory and motor issues related to development and speech,so that concrete operations can be taught and further complex skills can be achieved.Its like tutions."
     });
     var prescription = [];
@@ -46,7 +47,8 @@ const PrescriptionFormEmpty = ({ changeImgURL }) => {
         isReceipt: true,
         isCertificate : true,
         istextArea1:true,
-        istextArea2:true
+        istextArea2:true,
+        istextArea3:true
 
     })
     localStorage.setItem('state', JSON.stringify(state))
@@ -165,8 +167,10 @@ const PrescriptionFormEmpty = ({ changeImgURL }) => {
     const [pswd, setPswd] = useState('');
     const onHandleChangePswd = (e) => {
         const value = e.target.value;
-        setPswd(value);
-
+        // setPswd(value);
+        if(value == '9064'){
+            setEnterPswd(false);
+        }
     }
     const onHandleChangeCertificate = (e) => {
         const name = e.target.name;
@@ -290,7 +294,7 @@ const PrescriptionFormEmpty = ({ changeImgURL }) => {
                             </Label>
                         </FormGroup>
 
-                        <Button onClick={submitPswd} style={{ width: "400px", margin: "4px" }} >Go To Prescription Form</Button>
+                        {/* <Button onClick={submitPswd} style={{ width: "400px", margin: "4px" }} >Go To Prescription Form</Button> */}
                     </div>
 
                 </div>) : (<>
@@ -339,7 +343,18 @@ const PrescriptionFormEmpty = ({ changeImgURL }) => {
                                 required
                             />
                         </FormGroup>
-
+                        <FormGroup floating style={{ width: "400px", margin: "4px" }}>
+                            <Input
+                                id="textArea3"
+                                name="textArea3"
+                                placeholder="textArea3"
+                                type="textarea"
+                                style={{ height: "100px" }}
+                                onChange={onHandleChangeCertificate}
+                                className="inp"
+                                required
+                            />
+                        </FormGroup>
                             {createInputs()}
                             <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-around"}}>
                                 <Input type='button' value='+ Add Prescription ' onClick={() => addClick('')} style={{ marginBottom: "10px",marginRight:"15px", width: "500px" }} />

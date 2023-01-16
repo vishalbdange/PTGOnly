@@ -23,7 +23,7 @@ const Prescriptions = () => {
     const [prescriptions,setPrescriptions] = useState([]);
    
     useEffect(async ()=>{
-        await axios.get('http://localhost:5000/all')
+        await axios.get('https://aakar-clinic.onrender.com/all')
         .then(response => setPrescriptions(response.data) );
     },[])
     localStorage.setItem('all-prescriptions', JSON.stringify(prescriptions))

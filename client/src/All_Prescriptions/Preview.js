@@ -45,14 +45,14 @@ const Preview = (prop) => {
    console.log(pres)
     
    const [presEdited, setPresEdited] = useState({
-        pid:pres.mobile_no,
+        pid:pres.pid,
         dob: pres.dob,
         visit_no: pres.visit_no,
         name : pres.name,
         address: pres.address,
         age : pres.age,
         sex : pres.sex, 
-        mobile_no : pres.mobile_no,
+        mobile_no : pres.pid,
         diagnosis :pres.diagnosis,
         goal_for_next_month : pres.goal_for_next_month,
         prescription: pres.prescription,
@@ -315,7 +315,7 @@ const Preview = (prop) => {
     const handleSubmitEdit = () =>{
 
         console.log(presEdited)
-        axios.put(`http://localhost:5000/all/prescriptions/${pres.pid}-${pres.name}`, presEdited)
+        axios.put(`https://aakar-clinic.onrender.com/all/prescriptions/${pres.pid}-${pres.name}`, presEdited)
         handleClose();
     }
 
@@ -324,7 +324,7 @@ const Preview = (prop) => {
         <NavbarComponent />
         
         <div className="prescription-view" >
-        <CsvDownloadButton data={pres}/>
+        {/* <CsvDownloadButton data={pres}/> */}
         <div style={{textAlign:"center",marginTop:"10px"}}>
             <h4 style={{color:"blue"}}>(Edit here)
            <IconButton
@@ -510,6 +510,7 @@ const Preview = (prop) => {
   >
     Good Data ✨
   </CsvDownload> */}
+  <br/> <br />
             <section class="doctor-info">
                 <div class="doctor-name">
                 <span>Dr Santosh <surname>Kondekar</surname></span>
@@ -574,7 +575,7 @@ const Preview = (prop) => {
                         <b > &nbsp;&nbsp;ID </b>   
                     </Grid>
                     <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
-                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{pres.moblie_number}  
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{pres.pid}  
                     </Grid>
                       
                     <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
