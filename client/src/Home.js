@@ -67,12 +67,13 @@ const Home = () => {
                 <ListItem>
                     <Link to="/prescription" ><Button  color="info" >Prescription </Button></Link> &nbsp;&nbsp;
                     <Link to="/short-prescription" ><Button  color="info" >Certificate </Button></Link> &nbsp;    &nbsp;   
-                    <Link to="/autism-score" ><Button color="info" >Autism-Score </Button></Link>
+                    <Link to="/autism-score" ><Button color="info" >Autism-Score </Button></Link>&nbsp;&nbsp;
+                    <Link to="/form2" ><Button color="info" >Form2</Button></Link>&nbsp;&nbsp;
+                    <Link to="/dsm5-for-adhd" ><Button color="info" >DSM5 for ADHD</Button></Link>
                 </ListItem>
-
                 <ListItem>
                        
-                    <Link to="/form2" ><Button color="info" >Form2</Button></Link>&nbsp;&nbsp;<Link to="/form1" ><Button color="info" >Form1</Button></Link> &nbsp; &nbsp; <Link to="/cars" ><Button color="info" >CARS</Button></Link>&nbsp; &nbsp; <Link to="/all" ><Button color="info" >All</Button></Link>
+                    <Link to="/indian-autism-score" ><Button color="info" >Indian-Autism-Score </Button></Link>&nbsp;&nbsp;<Link to="/form1" ><Button color="info" >Form1</Button></Link> &nbsp; &nbsp; <Link to="/cars" ><Button color="info" >CARS</Button></Link>&nbsp; &nbsp; <Link to="/all" ><Button color="info" >All</Button></Link>
                 </ListItem>
                 {/* <ListItem>
                     
@@ -96,6 +97,9 @@ const Home = () => {
                 </ListItem>
                 <ListItem>
                     <Link to="/autism-score" ><Button color="info" >Autism-Score </Button></Link>
+                </ListItem>
+                <ListItem>
+                    <Link to="/indian-autism-score" ><Button color="info" >Indian-Autism-Score </Button></Link>
                 </ListItem>
                 <ListItem>
                     <Link to="/form2" ><Button color="info" >Form2</Button></Link>

@@ -89,10 +89,7 @@ table{
     .aakar-logo {
         width:400px;
     }
-    .patient-profile  {
-        font-size: 8px;
-        color: crimson;
-    }
+  
     .textArea {
         /* min-height: 130px; */
         height: 400px;
@@ -152,7 +149,7 @@ b{
 .page {
     border : 2px solid red;
      
-	/* Styles for better appearance on screens only -- are reset to defaults in print styles later */
+	/* Styles for better appearance on screens only -- are reset to default in print styles later */
 
 	/* Reflect the paper width in the screen rendering (must match size from @page rule) */
 	width: 21cm;

@@ -281,8 +281,7 @@ const Form = () => {
                                                            className="autInp"
                                                            onChange={handleChangeForm}
                                                            required
-                                                              style={{ width:"200px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
-                                                        
+                                                           style={{ width:"400px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"4px"}}                                                        
                                                            
                                                        />
                                                    </Col>
@@ -299,8 +298,7 @@ const Form = () => {
                                                            className="autInp"
                                                            onChange={handleChangeForm}
                                                            required
-                                                              style={{ width:"200px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
-                                                       />
+                                                           style={{ width:"400px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"4px"}}                                                       />
                                                    </Col>
                             </FormGroup>
                             <FormGroup style={{textAlign:"center"}}>
@@ -315,8 +313,7 @@ const Form = () => {
                                                            className="autInp"
                                                            onChange={handleChangeForm}
                                                            required
-                                                              style={{ width:"200px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
-                                                       />
+                                                           style={{ width:"400px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"4px"}}                                                       />
                                                    </Col>
                             </FormGroup>
                             <FormGroup style={{textAlign:"center"}}>
@@ -331,8 +328,7 @@ const Form = () => {
                                                            className="autInp"
                                                            onChange={handleChangeForm}
                                                            required
-                                                              style={{ width:"200px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
-                                                       />
+                                                           style={{ width:"400px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"4px"}}                                                       />
                                                    </Col>
                             </FormGroup>
                             <FormGroup style={{textAlign:"center"}}>
@@ -348,8 +344,7 @@ const Form = () => {
                                                            className="autInp"
                                                            onChange={handleChangeForm}
                                                            required
-                                                              style={{ width:"200px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"10px"}}
-                                                       />
+                                                           style={{ width:"400px",padding:"5px",outline:"none",border:"none",boxShadow:"1px 1px 6px grey",borderRadius:"4px"}}                                                       />
                                                    </Col>
                             </FormGroup>
                             <div style={{textAlign:"center"}}> <Button type="submit">Go To Assesment</Button> </div>

@@ -51,7 +51,7 @@ const PreviewEmpty = ({ imageURL }) => {
             axios({
                 method: 'post',
                 // url: 'https://aakar-clinic.onrender.com/prescription',
-                url: 'http://localhost:5000/saveimg',
+                url: 'https://aakar-clinic.onrender.com/saveimg',
                 data:  {'base64String':imgData,'name':state.Name}, // you are sending body instead
                 headers: {
                 'Content-Type': 'application/json'

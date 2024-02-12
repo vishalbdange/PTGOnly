@@ -21,7 +21,9 @@ dotenv.config();
  
  var sample;
  async function run() {
-    await mongoose.connect('mongodb+srv://aakarclinic:Aakar%40clinic1@cluster0.lozeiof.mongodb.net/?retryWrites=true&w=majority');
+    console.log("Before connection")
+    await mongoose.connect(`mongodb+srv://aakarclinic:${encodeURIComponent('aakar@1')}@cluster0.lozeiof.mongodb.net`)
+    console.log("AFter connection")
     sample =  await Prescription.find(); // Works!
   }
 run();
@@ -38,7 +40,8 @@ app.get('/all',async (req,res)=>{
 })
 
 app.put('/all/prescriptions/:id',async (req,res)=>{
-    const {id} = req.body.name;
+    console.log(req.params)
+    const {id} = req.params.id;
     console.log("All request received")
     console.log(req.body)
 

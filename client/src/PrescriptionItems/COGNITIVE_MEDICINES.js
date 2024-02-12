@@ -1,0 +1,10 @@
+exports.cognitive_medicines = [
+    //1-11 and 19 prefilled
+    //Font Style Change 
+    "SYR  L-CARNOSTONE 10ML DAILY FOR 1 MONTH",
+    "SYR BIGPLUS 10ML DAILY FOR 1 MONTH",
+    "SYR PARADOX 10ML DAILY FOR 1 MONTH",
+    "SYR ASPCARNO 10ML DAILY FOR 1 MONTH",
+    "SYR KRTSWUE 10ML DAILY FOR 1 MONTH",
+    "SYR MECOB 10ML DAILY FOR 1 MONTH"
+] ;
