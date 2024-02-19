@@ -36,7 +36,7 @@ const Prescriptions = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     useEffect(() => {
-        const presData = axios.get('http://localhost:5000/all').then((response) => {
+        const presData = axios.get('https://aakar-clinic-app.onrender.com/all').then((response) => {
             console.log(response)
             setPrescriptions(response.data)
             return response.data

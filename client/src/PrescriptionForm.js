@@ -109,7 +109,7 @@ const PrescriptionForm = ({ changeImgURL }) => {
         localStorage.setItem('prescription', JSON.stringify(prescription))
         //Backend post request here
         console.log("Printing Prescription")
-        // axios.post('http://localhost:5000/prescription,', state)
+        // axios.post('https://aakar-clinic-app.onrender.com/prescription,', state)
         // .then((response) => {
         //     console.log(response.data)
         //     console.log("Prescription posted sucessfully")
