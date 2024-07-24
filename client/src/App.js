@@ -6,15 +6,13 @@ import Prescription from './All_Prescriptions/Prescription'
 import PrescriptionFormEmpty from './PrescriptionFormEmpty'
 import Preview from './Preview';
 import PdfTemplate from './PdfTemplate';
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
-import ReactPDF from '@react-pdf/renderer';
-import TestPDF from "./TestPDF.js";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from './AutismScorePredictor/Form'
 import IndianAutismForm from './IndianAutismScore/Form.js'
 import DSM5ForADHD from './DSM5ForADHD/Form.js'
 import AutismDSM from './AUTISM DSM/AutismDSM'
 import NavbarComponent from "./NavbarComponent"
+import MessageBoard from './MessageBoard/Dashboard.js';
 import Home from "./Home"
 import {
   BrowserRouter as Router,
@@ -32,17 +30,7 @@ import Form10IA from './Form_10IA/Form'
 
 
 
-const styles = StyleSheet.create({
-  page: {
-    flexDirection: 'row',
-    backgroundColor: '#E4E4E4'
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1
-  }
-});
+
 
 
 function App() {
@@ -73,6 +61,8 @@ function App() {
         <Route  exact path="/form10ia" element={<Form10IA />} />
         <Route  exact path="/all" element={<Prescriptions />} />
         <Route  exact path="/all/prescriptions/:pid" element={<Prescription />} />
+        <Route  exact path="/messageboard" element={<MessageBoard />} />
+        
         {/* <Route  exact path="/all/:pid" 
                 render={(props) =>
         <Prescription {...props} key={props.match.params.id} />

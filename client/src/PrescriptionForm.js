@@ -1,7 +1,6 @@
 import React, { useRef, useState, useMemo, useCallback } from 'react'
 // import axios from 'axios'
 import Pdf from "react-to-pdf";
-import TestPDF from './TestPDF';
 import { Link, useNavigate } from "react-router-dom"
 import './Form.css'
 import aakar from "./aakar.jpg"
@@ -109,7 +108,7 @@ const PrescriptionForm = ({ changeImgURL }) => {
         localStorage.setItem('prescription', JSON.stringify(prescription))
         //Backend post request here
         console.log("Printing Prescription")
-        // axios.post('https://aakar-clinic-app.onrender.com/prescription,', state)
+        // axios.post('/prescription,', state)
         // .then((response) => {
         //     console.log(response.data)
         //     console.log("Prescription posted sucessfully")
@@ -117,7 +116,7 @@ const PrescriptionForm = ({ changeImgURL }) => {
         axios({
             method: 'post',
             // url: 'https://aakar-clinic.onrender.com/prescription',
-            url: 'https://aakar-clinic.onrender.com/prescription',
+            url: 'http://localhost:5000/prescription',
             data: state, // you are sending body instead
             headers: {
             'Content-Type': 'application/json'

@@ -1,7 +1,6 @@
 import React,{ createRef, useState ,useEffect,useRef} from 'react'
 import './Preview.css'
 import aakar from "./aakar.jpg"
-import TestPDF from './TestPDF'
 import { useScreenshot } from 'use-react-screenshot'
 import { saveAs } from 'file-saver'
 // import sign from "./sign_new.jpg"
@@ -101,7 +100,7 @@ const Preview = ({imageURL}) => {
             axios({
                 method: 'post',
                 // url: 'https://aakar-clinic.onrender.com/prescription',
-                url: 'https://aakar-clinic.onrender.com/saveimg',
+                url: 'http://localhost:5000/saveimg',
                 data:  {'base64String':imgData,'name':state.Name}, // you are sending body instead
                 headers: {
                 'Content-Type': 'application/json'
@@ -322,7 +321,7 @@ const Preview = ({imageURL}) => {
             axios({
                 method: 'post',
                 // url: 'https://aakar-clinic.onrender.com/prescription',
-                url: 'https://aakar-clinic.onrender.com/saveimg',
+                url: 'http://localhost:5000/saveimg',
                 data:  {'base64String':imgData,'name':Name,'mobile_no':m_num,'personToMail':personToMail}, // you are sending body instead
                 headers: {
                 'Content-Type': 'application/json'
@@ -722,7 +721,6 @@ const Preview = ({imageURL}) => {
     
                 </section>
                     </section>
-            {/* <TestPDF state={state} /> */}
             </section >
         </div>
         </>

@@ -1,7 +1,6 @@
 import React, { createRef, useState, useEffect, useRef } from 'react'
 import './Preview.css'
 import aakar from "./aakar.jpg"
-import TestPDF from './TestPDF'
 import { useScreenshot } from 'use-react-screenshot'
 import { saveAs } from 'file-saver'
 import sign from "./sign.png"
@@ -327,7 +326,7 @@ const PreviewEmpty = ({ imageURL }) => {
 
                 </div>
             </section>
-            {/* <TestPDF state={state} /> */}
+         
 
         </div>
     )

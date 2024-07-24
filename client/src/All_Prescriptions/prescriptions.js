@@ -18,33 +18,46 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import {Grid} from '@mui/material'
+import { Grid } from '@mui/material'
 import TableHead from '@mui/material/TableHead';
 import Tooltip from '@mui/material/Tooltip';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import LinearProgress from '@mui/material/LinearProgress';
 import { styled } from '@mui/system';
 import {
     TablePagination,
-  } from '@mui/material';
+} from '@mui/material';
 import Preview from "./Preview"
+
 const Prescriptions = () => {
 
 
     const [prescriptions, setPrescriptions] = useState([]);
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = React.useState(30);
+    const [loading, setLoading] = useState(true)
+
+    const sortPrescriptionsByDate = (allprescriptions) => {
+        return allprescriptions.sort((a,b)=>{
+            return new Date(parseInt((b._id).substring(0, 8), 16) * 1000) - new Date(parseInt((a._id).substring(0, 8), 16) * 1000);
+        })
+    }
 
     useEffect(() => {
-        const presData = axios.get('https://aakar-clinic-app.onrender.com/all').then((response) => {
+        const presData = axios.get('/all').then((response) => {
             console.log(response)
-            setPrescriptions(response.data)
+            setPrescriptions(sortPrescriptionsByDate(response.data))
+            setLoading(false)
             return response.data
 
         });
-        console.log("displayAll", displayAll)
-        console.log(presData)
-    }, [])
+
+        //Logic to sort data w.r.t date
+        console.log("Sorting by date..")
+
+        console.log(prescriptions)
+        }, [])
     localStorage.setItem('all-prescriptions', JSON.stringify(prescriptions))
     const [p_name, setP_name] = useState('')
     const [p_id, setP_id] = useState('')
@@ -74,14 +87,17 @@ const Prescriptions = () => {
                 console.log(p_id)
                 if (item.pid?.toLowerCase().includes(p_id.toLowerCase())) {
                     return true;
-                } else if (item.name?.toLowerCase().includes(p_id.toLowerCase())) {
+                } 
+                else if (pswd=="9064" && item.name?.toLowerCase().includes(p_id.toLowerCase())) {
                     return true;
-                } else if (item.address?.toLowerCase().includes(p_id.toLowerCase())) {
+                } else if (pswd=="9064" && item.address?.toLowerCase().includes(p_id.toLowerCase())) {
                     return true;
-                } else {
+                } 
+                else {
                     return false;
                 }
             })
+            
             console.log(filteredData)
             setFilteredResults(filteredData)
         }
@@ -96,9 +112,45 @@ const Prescriptions = () => {
     }
 
     const [enterPswd, setEnterPswd] = useState(true)
+    const [pswd,setPswd] = useState("")
     const onHandleChangePswd = (e) => {
-        if (e.target.value == '9064') {
+        setPswd(e.target.value)
+    }
+    const findPatientByNumber = () => {
+
+        pswd.replaceAll(' ','')
+        console.log(pswd)
+        
+        if (pswd == '9064') {
             setEnterPswd(false);
+        }else {
+            //if patient enter a number
+            var filteredData = prescriptions.filter((item) => {
+                
+                
+                if (pswd !== "" && item.pid.includes(pswd)) {
+                    console.log(item.pid)
+                    setDisplayAll(false)
+                    setEnterPswd(false);
+                    return true;
+                }
+                else {
+                    
+                    return false;
+                }
+            })
+            if(filteredData.length != 0) {
+                console.log(filteredData)
+                setFilteredResults(filteredData)
+            }else{
+                // if(pswd=="" || pswd!="9064"){
+                //     alert("Please Enter a Valid Mobile Number")
+                // }
+                // alert("No PAtient Found")
+                
+            }
+            setPswd("")
+            
         }
     }
     const grey = {
@@ -148,7 +200,7 @@ const Prescriptions = () => {
         `,
     );
 
-
+    let datetime = ""
     const StyledTableRow = styled(TableRow)(({ theme }) => ({
         '&:nth-of-type(odd)': {
             backgroundColor: theme.palette.action.hover,
@@ -164,174 +216,222 @@ const Prescriptions = () => {
 
         },
     }));
-    const [currPres,setCurrPres] = useState('')
-    const ChangeCurrentPrescription = (link) =>{
+    const [currPres, setCurrPres] = useState('')
+    const ChangeCurrentPrescription = (link) => {
         setCurrPres(link);
     }
-    
+
     return (
         <>
             <NavbarComponent />
+            {enterPswd ? (
+                <div className="password-container">
 
-           
-            <Grid
-  container
-  spacing={0}
-  direction="column"
-  alignItems="center"
-  justifyContent="center"
-  sx={{ minHeight: '100vh' }}
->   
-<Grid item xs={3}>
-                <Paper style={{ minWidth:"10vw",maxWidth:"100%",margin: "20px", padding: "10px" }}>
-                    <div style={{ textAlign: "center" }}>
-                        <label><Badge style={{ fontSize: "16px", borderBottom: "1px solid Red" }}>Search a prescription</Badge></label> < hr />
-                        <Input
-                            placeholder='Enter Mobile Number/Name/Address'
-                            onChange={handleChange}
-                            name='p_search'
-                           
-                            type="text"
-                        />
-                        <IconButton
-                            size="large"
-                            onClick={searchItems}
-                            color="inherit"
-                        >
-                            <SearchIcon />
-                        </IconButton>
-                        <Button onClick={handleReset}>Clear</Button>
+                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", cborder: "2px solid black" }}>
+                        <Label for="exampleDate" >
+                            Enter password to proceed :
+                        </Label>
+                        <FormGroup  style={{ width: "400px", margin: "4px" }}>
+                            <Input
+                                id="adminpswd"
+                                name="adminpswd"
+                                placeholder="Enter password to proceed"
+                                type="text"
+                                onInput={onHandleChangePswd}
+                                className="inp"
+                                required
+                            />
+                             <IconButton
+                                        size="large"
+                                        onClick={findPatientByNumber}
+                                        color="inherit"
+                                    >
+                                        <SearchIcon />
+                                    </IconButton>
+                        </FormGroup>
                     </div>
-
-                    <div style={{ textAlign: "center", padding: "10px", borderBottom: "1px solid black" }}>
-
-                        <Badge style={{ fontSize: "12px", borderBottom: "1px solid black" }}>All Prescriptions</Badge>
                     </div>
+                    ) :(
 
-                    {
+                    <Grid
+                        container
+                        spacing={0}
+                        direction="column"
+                        alignItems="center"
+                        justifyContent="center"
+                        sx={{ minHeight: '100vh' }}
+                    >
+                        <Grid item xs={3}>
+                            <Paper style={{ minWidth: "10vw", maxWidth: "100%", margin: "20px", padding: "10px" }}>
+                                {
+                                    pswd=="9064" ? (<> <div style={{ textAlign: "center" }}>
+                                    <label><Badge style={{ fontSize: "16px", borderBottom: "1px solid Red" }}>Search a prescription</Badge></label> < hr />
+                                    <Input
+                                        placeholder='Enter Mobile Number/Name/Address'
+                                        onChange={handleChange}
+                                        name='p_search'
 
-                        !displayAll ? (
+                                        type="text"
+                                    />
+                                    <IconButton
+                                        size="large"
+                                        onClick={searchItems}
+                                        color="inherit"
+                                    >
+                                        <SearchIcon />
+                                    </IconButton>
+                                    <Button onClick={handleReset}>Clear</Button>
+                                </div>
+                                    </>) : (<></>)
+                                }
+                               
 
-                            // console.log(filteredResults)
-                            filteredResults.map((item1, key) => {
-                                console.log(item1)
-                                return (
-                                    <>
-                                        <Card sx={{ width: 400, }} style={{ margin: "10px" }}>
-                                            <CardContent>
-                                                {
-                                                    item1.pid && (
-                                                        <Typography sx={{ mb: 1.5 }} variant="body2">
-                                                            Patient ID : {item1.pid}
-                                                        </Typography>)
-                                                }
-                                                {
-                                                    item1.name && (
-                                                        <Typography sx={{ mb: 1.5 }} variant="body2">
-                                                            Name : {item1.name}
-                                                        </Typography>)
-                                                }
-                                                {
-                                                    item1.visit_no && (
-                                                        <Typography sx={{ mb: 1.5 }} variant="body2">
-                                                            Visit No. : {item1.visit_no}
-                                                        </Typography>)
-                                                }
-                                                {
-                                                    (item1.age && item1.sex) && (
+                                <div style={{ textAlign: "center", padding: "10px" }}>
 
-                                                        <Typography variant="body2">
-                                                            Age : {item1.age} &nbsp;&nbsp;&nbsp;&nbsp; Sex : {item1.sex}
-                                                            <br />
-                                                        </Typography>)
-                                                }
+                                    <Badge style={{ fontSize: "12px", borderBottom: "1px solid black" }}>All Prescriptions</Badge>
+                                </div>
+                                {loading ? (<>
+                                    <div><LinearProgress /></div>
+                                </>) :
 
-                                            </CardContent>
-                                            <CardActions>
-                                                <Button size="small" href={`/all/prescriptions/${item1.pid}-${item1.name}`}>View More</Button>
-                                            </CardActions>
-                                        </Card>
-                                    </>
-                                )
-                            })
+                                    !displayAll ? (
+                                        
+                                        // console.log(filteredResults)
+                                        filteredResults.map((item1, key) => {
+                                            console.log(item1)
+                                            return (
+                                                <>
+                                                    <Card sx={{ width: 400, }} style={{ margin: "10px" }}>
+                                                        <CardContent>
+                                                            {
+                                                                item1.pid && (
+                                                                    <Typography sx={{ mb: 1.5 }} variant="body2">
+                                                                        Patient ID : {item1.pid}
+                                                                    </Typography>)
+                                                            }
+                                                            {
+                                                                item1.name && (
+                                                                    <Typography sx={{ mb: 1.5 }} variant="body2">
+                                                                        Name : {item1.name}
+                                                                    </Typography>)
+                                                            }
+                                                            {
+                                                                new Date(parseInt((item1._id).substring(0, 8), 16) * 1000).toDateString() && (
+                                                                    <Typography sx={{ mb: 1.5 }} variant="body2">
+                                                                    Date : {new Date(parseInt((item1._id).substring(0, 8), 16) * 1000).toDateString()}
+                                                                    </Typography>
+                                                                )
+                                                            }
+                                                            {
+                                                                item1.visit_no && (
+                                                                    <Typography sx={{ mb: 1.5 }} variant="body2">
+                                                                        Visit No. : {item1.visit_no}
+                                                                    </Typography>)
+                                                            }
+                                                            {
+                                                                (item1.age && item1.sex) && (
 
-                        )
-                            : (
+                                                                    <Typography variant="body2">
+                                                                        Age : {item1.age} &nbsp;&nbsp;&nbsp;&nbsp; Sex : {item1.sex}
+                                                                        <br />
+                                                                    </Typography>)
+                                                            }
 
-                                <>
-                                    <Root sx={{ maxWidth: '100%' }}>  <table aria-label="custom pagination table">
-                                        <thead>
-                                            <tr>
-                                                <th style={{textAlign:"center"}}>Patient's Name</th>
-                                                <th style={{textAlign:"center"}}>Mobile No.</th>
-                                                <th style={{textAlign:"center"}}>Diagnosis</th>
-                                                <th style={{textAlign:"center"}}>Full Prescription</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody >
-                                            {(rowsPerPage > 0
-                                                ? prescriptions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                                : prescriptions
-                                            ).map((prescription) => (
-                                                <tr key={prescription.p_id}>
-                                                     <td style={{ width:440 ,textAlign:"center"}}>{prescription.name}</td>
-                                                     {
-                                                        prescription.pid == '' && ( <td style={{ width:440 ,textAlign:"center"}}>N/A</td>)
-                                                     }
-                                                    {
-                                                        prescription.pid !== '' && (<td style={{ width:440 ,textAlign:"center"}}>{prescription.pid}  </td>)
-                                                    }
-                                                    <Tooltip title={prescription.diagnosis}>
-                                                    <td  align="center" style={{ width:440 ,textAlign:"center"}}>
-                                                        {prescription.diagnosis.slice(0, 10)}...
-                                                    </td>
-                                                    </Tooltip>
-                                                    <td style={{ width:440 ,textAlign:"center"}} align="right">
-                                                        <Button size="small" href={`/all/prescriptions/${prescription.pid}-${prescription.name}`} ><a>Show Prescription</a></Button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                            {emptyRows > 0 && (
-                                                <tr style={{ height: 41 * emptyRows }}>
-                                                    <td colSpan={3} aria-hidden />
-                                                </tr>
-                                            )}
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <TablePagination
-                                                    rowsPerPageOptions={[5, 10, 25, 50,100]}
-                                                    colSpan={3}
-                                                    count={prescriptions.length}
-                                                    rowsPerPage={rowsPerPage}
-                                                    page={page}
-                                                    slotProps={{
-                                                        select: {
-                                                            'aria-label': 'rows per page',
-                                                        },
-                                                        actions: {
-                                                            showFirstButton: true,
-                                                            showLastButton: true,
-                                                        },
-                                                    }}
-                                                    onPageChange={handleChangePage}
-                                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                                />
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                    </Root>
-                                </>
-                            )
-                    }
-                </Paper>
-                </Grid>
-                </Grid>
+                                                        </CardContent>
+                                                        <CardActions>
+                                                            <Button size="small" href={`/all/prescriptions/${item1.pid}-${item1.name}`}>View More</Button>
+                                                        </CardActions>
+                                                    </Card>
+                                                </>
+                                            )
+                                        })
 
-        </>
-    )
+                                    )
+                                        : (
+
+                                            <>
+                                                <Root sx={{ maxWidth: '100%' }}>  <table aria-label="custom pagination table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style={{ textAlign: "center" }}>Patient's Name</th>
+                                                            <th style={{ textAlign: "center" }}>Mobile No.</th>
+                                                            <th style={{ textAlign: "center" }}>Diagnosis</th>
+                                                            <th style={{ textAlign: "center" }}>Date</th>
+                                                            <th style={{ textAlign: "center" }}>Full Prescription</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody >
+                                                        {(rowsPerPage > 0
+                                                            ? prescriptions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                            : prescriptions
+                                                        ).map((prescription) => (
+                                                            <tr key={prescription.p_id}>
+                                                                
+                                                                
+                                                                <td style={{ width: 440, textAlign: "center" }}>{prescription.name}</td>
+                                                                {
+                                                                    prescription.pid == '' && (<td style={{ width: 440, textAlign: "center" }}>N/A</td>)
+                                                                }
+                                                                {
+                                                                    prescription.pid !== '' && (<td style={{ width: 440, textAlign: "center" }}>{prescription.pid}  </td>)
+                                                                }
+                                                                <Tooltip title={prescription.diagnosis}>
+                                                                    <td align="center" style={{ width: 440, textAlign: "center" }}>
+                                                                        {prescription.diagnosis.slice(0, 10)}...
+                                                                    </td>
+                                                                </Tooltip>
+                        
+                                                                <td>{new Date(parseInt((prescription._id).substring(0, 8), 16) * 1000).toDateString()}</td>
+                                                                <td style={{ width: 440, textAlign: "center" }} align="right">
+                                                                    <Button size="small" href={`/all/prescriptions/${prescription.pid}-${prescription.name}`} ><a>Show Prescription</a></Button>
+                                                                </td>
+                                                                {/* <td>
+                                                   
+                                                       {datetime = new ObjectId(prescription._id).getTimestamp()}
+                                                    </td> */}
+                                                            </tr>
+                                                        ))}
+                                                        {emptyRows > 0 && (
+                                                            <tr style={{ height: 41 * emptyRows }}>
+                                                                <td colSpan={3} aria-hidden />
+                                                            </tr>
+                                                        )}
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <TablePagination
+                                                                rowsPerPageOptions={[30,50,75, 100]}
+                                                                colSpan={3}
+                                                                count={prescriptions.length}
+                                                                rowsPerPage={rowsPerPage}
+                                                                page={page}
+                                                                slotProps={{
+                                                                    select: {
+                                                                        'aria-label': 'rows per page',
+                                                                    },
+                                                                    actions: {
+                                                                        showFirstButton: true,
+                                                                        showLastButton: true,
+                                                                    },
+                                                                }}
+                                                                onPageChange={handleChangePage}
+                                                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                                            />
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                                </Root>
+                                            </>
+                                        )
+                                }
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                )}
+                </>
+            )
 }
 
 
-export default Prescriptions
+            export default Prescriptions
 

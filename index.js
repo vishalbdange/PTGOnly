@@ -34,7 +34,6 @@ app.get('/',(req,res)=>{
 app.get('/all',async (req,res)=>{
     console.log("All request received")
     var sample = await Prescription.find();
-    console.log(sample)
     res.status(200).json(sample)
     return sample;
 })
