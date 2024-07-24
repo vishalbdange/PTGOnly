@@ -214,7 +214,10 @@ app.post('/prescription',(req,res)=>{
         .save()
         .then(
             () => console.log("One Prescription added"), 
-            (err) => console.log(err.message)
+            (err) => {
+             console.log(err.message)
+             res.send(err.message)
+            }
         );
         res.send("Post request sent");
 })
