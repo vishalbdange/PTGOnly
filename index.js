@@ -16,7 +16,7 @@ app.use(express.urlencoded({limit: '50mb', extended: true, parameterLimit: 50000
 // parse application/json
 
 
-const PORT =  5000;
+const PORT =  5010;
 dotenv.config();
  
  var sample;
