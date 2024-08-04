@@ -16,7 +16,7 @@ app.use(express.urlencoded({limit: '50mb', extended: true, parameterLimit: 50000
 // parse application/json
 
 
-const PORT =  5000;
+const PORT =  5010;
 dotenv.config();
  
  var sample;
@@ -233,7 +233,10 @@ app.post('/prescription',(req,res)=>{
         .save()
         .then(
             () => console.log("One Prescription added"), 
-            (err) => console.log(err.message)
+            (err) => {
+             console.log(err.message)
+             res.send(err.message)
+            }
         );
         res.send("Post request sent");
 })
