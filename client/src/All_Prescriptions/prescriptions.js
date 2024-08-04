@@ -5,12 +5,9 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import { Input, FormGroup } from '@material-ui/core';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
-import { Label } from 'reactstrap'
-import { IconButton } from '@material-ui/core';
+import { IconButton ,InputBase,Button as Button2} from '@material-ui/core';
 import axios from 'axios'
 import { Badge } from 'reactstrap';
 import NavbarComponent from "../NavbarComponent"
@@ -18,12 +15,13 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import { Grid } from '@mui/material'
+import { Grid, TextField } from '@mui/material'
 import TableHead from '@mui/material/TableHead';
 import Tooltip from '@mui/material/Tooltip';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import LinearProgress from '@mui/material/LinearProgress';
+import { FormGroup, Form, Input,Label, Button, Col, Alert } from 'reactstrap'
 import { styled } from '@mui/system';
 import {
     TablePagination,
@@ -34,6 +32,9 @@ const Prescriptions = () => {
 
 
     const [prescriptions, setPrescriptions] = useState([]);
+    const [lastTenPrescriptions, setLastTenPrescriptions] = useState([]);
+    const [lastTwentyFivePrescriptions, setLastTwentyFivePrescriptions] = useState([]);
+    const [currentPrescriptions,setCurrentPrescriptions] = useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(30);
     const [loading, setLoading] = useState(true)
@@ -44,19 +45,34 @@ const Prescriptions = () => {
         })
     }
 
-    useEffect(() => {
-        const presData = axios.get('/all').then((response) => {
+    useEffect(async () => {
+        const lastTenPresData = await axios.get('http://localhost:5000/getLastTen').then((response) => {
+            setLoading(true)   
+            setLastTenPrescriptions(response.data);
+            setLoading(true)   
+            return response.data
+
+        });
+        const lastTwentyFivePresData = await axios.get('http://localhost:5000/getLastTwentyFive').then((response) => {
+            setLoading(true)    
+            console.log(response)
+            setLastTwentyFivePrescriptions(response.data)
+            setLoading(false)
+            return response.data
+
+        });
+        const presData = await axios.get('http://localhost:5000/all').then((response) => {
+            setLoading(true)
             console.log(response)
             setPrescriptions(sortPrescriptionsByDate(response.data))
             setLoading(false)
             return response.data
 
         });
-
-        //Logic to sort data w.r.t date
-        console.log("Sorting by date..")
-
-        console.log(prescriptions)
+        console.log(lastTenPresData);
+        console.log(lastTwentyFivePresData);
+        console.log(presData);
+        setCurrentPrescriptions(lastTenPresData);
         }, [])
     localStorage.setItem('all-prescriptions', JSON.stringify(prescriptions))
     const [p_name, setP_name] = useState('')
@@ -65,24 +81,32 @@ const Prescriptions = () => {
     const [filteredResults, setFilteredResults] = useState([])
     const [reset, setReset] = useState(true)
     const [displayAll, setDisplayAll] = useState(true)
-
-
+    const viewAllPrescriptions = () => {
+        setCurrentPrescriptions(prescriptions);
+    }
+    const viewLastTenPrescriptions = () => {
+        setCurrentPrescriptions(lastTenPrescriptions);
+    }
+    
 
 
     const handleChange = (e) => {
         console.log(prescriptions)
         setReset(false)
-        if (e.target.pid == 'p_search' || e.target.name == 'p_search' || e.target.name == 'p_search') {
-            setP_id(e.target.value);
-        }
+        setP_id(e.target.value);
+        // if (e.target.pid == 'p_search' || e.target.name == 'p_search' || e.target.name == 'p_search') {
+        //     setP_id(e.target.value);
+        // }
         console.log(p_id)
     }
     const searchItems = () => {
         // console.log(p_id)
         setDisplayAll(false)
+        console.log("PID")
+        console.log(p_id)
         if (p_id != '') {
-            console.log(prescriptions)
-            var filteredData = prescriptions.filter((item) => {
+            console.log(currentPrescriptions)
+            var filteredData = currentPrescriptions.filter((item) => {
                 console.log(item.pid)
                 console.log(p_id)
                 if (item.pid?.toLowerCase().includes(p_id.toLowerCase())) {
@@ -102,19 +126,24 @@ const Prescriptions = () => {
             setFilteredResults(filteredData)
         }
         else {
-            displayAll(true)
+            setDisplayAll(true)
         }
         console.log(filteredResults)
     }
     const handleReset = () => {
-        setDisplayAll(true);
+        console.log("clearing")
         setP_id('');
+        setDisplayAll(true);
+        
     }
 
     const [enterPswd, setEnterPswd] = useState(true)
     const [pswd,setPswd] = useState("")
     const onHandleChangePswd = (e) => {
-        setPswd(e.target.value)
+        setPswd(e.target.value  )
+        if(e.target.value == '9064'){
+            setEnterPswd(false);
+        }
     }
     const findPatientByNumber = () => {
 
@@ -226,29 +255,28 @@ const Prescriptions = () => {
             <NavbarComponent />
             {enterPswd ? (
                 <div className="password-container">
-
+                    <div style={{ textAlign: "center", fontSize: "26px", fontWeight: "200 !important", margin: "20px", padding: "10px" }}>
+                        <Button varient="contained" color="success" style={{ padding: "20px" }} >
+                            View Prescriptions
+                        </Button>
+                    </div>
                     <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", cborder: "2px solid black" }}>
-                        <Label for="exampleDate" >
-                            Enter password to proceed :
-                        </Label>
-                        <FormGroup  style={{ width: "400px", margin: "4px" }}>
+                        
+                        <FormGroup floating style={{ width: "400px", margin: "4px" }}>
                             <Input
                                 id="adminpswd"
-                                name="adminpswd"
+                                name="pswd"
                                 placeholder="Enter password to proceed"
-                                type="text"
-                                onInput={onHandleChangePswd}
+                                type="password"
+                                onChange={onHandleChangePswd}
                                 className="inp"
-                                required
+                                required    
                             />
-                             <IconButton
-                                        size="large"
-                                        onClick={findPatientByNumber}
-                                        color="inherit"
-                                    >
-                                        <SearchIcon />
-                                    </IconButton>
+                            <Label for="exampleDate" >
+                                Enter Password :
+                            </Label>
                         </FormGroup>
+
                     </div>
                     </div>
                     ) :(
@@ -262,33 +290,45 @@ const Prescriptions = () => {
                         sx={{ minHeight: '100vh' }}
                     >
                         <Grid item xs={3}>
-                            <Paper style={{ minWidth: "10vw", maxWidth: "100%", margin: "20px", padding: "10px" }}>
+                            <Paper style={{ minWidth: "10vw", maxWidth: "100%", margin: "20px", padding: "30px" }}>
                                 {
                                     pswd=="9064" ? (<> <div style={{ textAlign: "center" }}>
-                                    <label><Badge style={{ fontSize: "16px", borderBottom: "1px solid Red" }}>Search a prescription</Badge></label> < hr />
-                                    <Input
-                                        placeholder='Enter Mobile Number/Name/Address'
+                                    <label><Badge style={{ fontSize: "22px" }}>View Prescriptions</Badge></label> < hr />
+                                    <div style={{display:"flex",justifyContent:"center"}}>
+                                    <Paper
+                                        component="form"
+                                        sx={{ p: '4px 4px', display: 'flex',flexDirection:"row",alignItems:"center",justifyContent:"center",width:"840px"}}
+                                        >
+                                    <InputBase
+                                        sx={{ ml: 1, flex: 1,width:"340px"}}
+                                        placeholder="Enter Mobile Number/Name/Address"
+                                        inputProps={{ 'aria-label': 'Enter Mobile Number/Name/Address' }}
                                         onChange={handleChange}
-                                        name='p_search'
-
-                                        type="text"
+                                        value={p_id}
+                                        fullWidth
                                     />
                                     <IconButton
                                         size="large"
                                         onClick={searchItems}
-                                        color="inherit"
+                                        color="primary"
+                                        label="Search a Prescription"
+                                        style={{ margin: '0px 10px 0px 0px' }}
                                     >
-                                        <SearchIcon />
+                                        <SearchIcon fontSize="large" color="primary"/>
                                     </IconButton>
-                                    <Button onClick={handleReset}>Clear</Button>
+                                    <Button onClick={handleReset} >Clear</Button>
+                                    <Button onClick={viewAllPrescriptions} style={{margin:"0px 0px 0px 15px ",width:"330px"}}>View All</Button>
+                                    <Button onClick={viewLastTenPrescriptions} style={{margin:"0px 0px 0px 15px ",width:"330px"}}>Last 10</Button>
+                                    </Paper>
+                                    </div>
                                 </div>
-                                    </>) : (<></>)
+                                    </>) : (<>  </>)
                                 }
                                
 
                                 <div style={{ textAlign: "center", padding: "10px" }}>
-
-                                    <Badge style={{ fontSize: "12px", borderBottom: "1px solid black" }}>All Prescriptions</Badge>
+                                    
+                                   <hr />
                                 </div>
                                 {loading ? (<>
                                     <div><LinearProgress /></div>
@@ -297,6 +337,7 @@ const Prescriptions = () => {
                                     !displayAll ? (
                                         
                                         // console.log(filteredResults)
+                                        
                                         filteredResults.map((item1, key) => {
                                             console.log(item1)
                                             return (
@@ -353,37 +394,37 @@ const Prescriptions = () => {
                                                 <Root sx={{ maxWidth: '100%' }}>  <table aria-label="custom pagination table">
                                                     <thead>
                                                         <tr>
-                                                            <th style={{ textAlign: "center" }}>Patient's Name</th>
-                                                            <th style={{ textAlign: "center" }}>Mobile No.</th>
-                                                            <th style={{ textAlign: "center" }}>Diagnosis</th>
-                                                            <th style={{ textAlign: "center" }}>Date</th>
-                                                            <th style={{ textAlign: "center" }}>Full Prescription</th>
+                                                            <th style={{ textAlign: "center" ,fontSize:"18px"}}>Patient's Name</th>
+                                                            <th style={{ textAlign: "center" ,fontSize:"18px"}}>Mobile No.</th>
+                                                            <th style={{ textAlign: "center" ,fontSize:"18px"}}>Diagnosis</th>
+                                                            <th style={{ textAlign: "center" ,fontSize:"18px"}}>Date</th>
+                                                            <th style={{ textAlign: "center" ,fontSize:"18px"}}>Full Prescription</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody >
                                                         {(rowsPerPage > 0
-                                                            ? prescriptions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                                            : prescriptions
+                                                            ? currentPrescriptions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                            : currentPrescriptions
                                                         ).map((prescription) => (
                                                             <tr key={prescription.p_id}>
                                                                 
                                                                 
                                                                 <td style={{ width: 440, textAlign: "center" }}>{prescription.name}</td>
                                                                 {
-                                                                    prescription.pid == '' && (<td style={{ width: 440, textAlign: "center" }}>N/A</td>)
+                                                                    prescription.pid == '' && (<td style={{ width: 300, textAlign: "center" }}>N/A</td>)
                                                                 }
                                                                 {
-                                                                    prescription.pid !== '' && (<td style={{ width: 440, textAlign: "center" }}>{prescription.pid}  </td>)
+                                                                    prescription.pid !== '' && (<td style={{ width: 300, textAlign: "center" }}>{prescription.pid}  </td>)
                                                                 }
                                                                 <Tooltip title={prescription.diagnosis}>
-                                                                    <td align="center" style={{ width: 440, textAlign: "center" }}>
-                                                                        {prescription.diagnosis.slice(0, 10)}...
+                                                                    <td align="center" style={{ width: 300, textAlign: "center" }}>
+                                                                        {prescription.diagnosis.slice(0, 18)}...
                                                                     </td>
                                                                 </Tooltip>
                         
-                                                                <td>{new Date(parseInt((prescription._id).substring(0, 8), 16) * 1000).toDateString()}</td>
-                                                                <td style={{ width: 440, textAlign: "center" }} align="right">
-                                                                    <Button size="small" href={`/all/prescriptions/${prescription.pid}-${prescription.name}`} ><a>Show Prescription</a></Button>
+                                                                <td style={{ width: 300, textAlign: "center" }}>{new Date(parseInt((prescription._id).substring(0, 8), 16) * 1000).toDateString()}</td>
+                                                                <td style={{ width: 300, textAlign: "center" }} align="right">
+                                                                    <Button size="small" href={`/all/prescriptions/${prescription.pid}-${prescription.name}`} style={{margin:"4px 0px 4px 0px"}} ><a>Show Prescription</a></Button>
                                                                 </td>
                                                                 {/* <td>
                                                    
@@ -402,7 +443,7 @@ const Prescriptions = () => {
                                                             <TablePagination
                                                                 rowsPerPageOptions={[30,50,75, 100]}
                                                                 colSpan={3}
-                                                                count={prescriptions.length}
+                                                                count={currentPrescriptions.length}
                                                                 rowsPerPage={rowsPerPage}
                                                                 page={page}
                                                                 slotProps={{
@@ -420,6 +461,7 @@ const Prescriptions = () => {
                                                         </tr>
                                                     </tfoot>
                                                 </table>
+                                               
                                                 </Root>
                                             </>
                                         )

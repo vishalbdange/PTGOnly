@@ -2,7 +2,7 @@ const express = require("express")
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const Prescription = require("./models/presciption");
-
+const ObjectId = mongoose.Types.ObjectId;
 
 var cors = require('cors');
 var base64ToImage = require('base64-to-image');
@@ -22,15 +22,19 @@ dotenv.config();
  var sample;
  async function run() {
     console.log("Before connection")
-    await mongoose.connect(`mongodb+srv://aakarclinic:${encodeURIComponent('aakar@1')}@cluster0.lozeiof.mongodb.net`)
+    await mongoose.connect(`mongodb+srv://aakarclinic:${encodeURIComponent(process.env.MongoPassword)}@cluster0.lozeiof.mongodb.net`)
     console.log("AFter connection")
     sample =  await Prescription.find(); // Works!
   }
 run();
- 
+const getCreationTimeFromObjectId = (objectId) => {
+    return new Date(objectId.getTimestamp());
+}
+
 app.get('/',(req,res)=>{
     res.send("Home Server Page")
 });
+
 app.get('/all',async (req,res)=>{
     console.log("All request received")
     var sample = await Prescription.find();
@@ -38,6 +42,21 @@ app.get('/all',async (req,res)=>{
     return sample;
 })
 
+app.get('/getLastTen',async(req,res)=>{
+    console.log("Fetching last 10 : Backend");
+    var lastTen = await Prescription.find().sort({_id: -1}).limit(10, function (e, d) {})
+    res.status(200).json(lastTen);
+    return lastTen;
+});
+
+app.get('/getLastTwentyFive',async(req,res)=>{
+    console.log("Fetching last 25 : Backend");
+    var lastTwentyFive = await Prescription.find().sort({_id: -1}).limit(25, function (e, d) {})
+    res.status(200).json(lastTwentyFive);
+    return lastTwentyFive;
+});
+
+ 
 app.put('/all/prescriptions/:id',async (req,res)=>{
     console.log(req.params)
     const {id} = req.params.id;

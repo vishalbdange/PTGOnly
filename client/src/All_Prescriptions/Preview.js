@@ -405,7 +405,7 @@ const Preview = (prop) => {
                  <TextField
                     autoFocus
                     onChange={(e)=> handleChangeEdit(e)}
-                    defaultValue={pres.dob.slice(0,-14)}
+                    defaultValue={pres?.dob?.slice(0,-14)}
                     margin="dense"
                     name="dob"
                     id="dob"
@@ -595,7 +595,7 @@ const Preview = (prop) => {
                         <b > &nbsp;&nbsp;DOB </b>   
                     </Grid>
                     <Grid item xs={9} style={{borderBottom:"1px solid grey",borderRight:"1px solid #F6BE00",fontSize:"12px"}} >
-                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{pres.dob.slice(0,-14)}  
+                    &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;{pres.dob?.slice(0,-14)}  
                     </Grid>
                    
                     <Grid item xs={3} style={{borderBottom:"1px solid grey",borderLeft:"1px solid #F6BE00",borderRight:"1px solid grey",fontSize:"12px"}} >
