@@ -157,41 +157,6 @@ const NavbarComponent = () => {
                     >
                        Prescription
                     </Button>
-                    <Button
-                        key='all'
-                        sx={{ my: 2, display: 'block' }}
-                        href='/all'
-                    >
-                       All
-                    </Button>
-                    <Button
-                        key='form1'
-                        sx={{ my: 2, display: 'block' }}
-                        href='/form1'
-                    >
-                       form1
-                    </Button>
-                    <Button
-                        key='cars'
-                        sx={{ my: 2, display: 'block' }}
-                        href='/cars'
-                    >
-                       Cars
-                    </Button>
-                    <Button
-                        key='form2'
-                        sx={{ my: 2, display: 'block' }}
-                        href='/form2'
-                    >
-                       form2
-                    </Button>
-                    <Button
-                        key='autism-score'
-                        sx={{ my: 2, display: 'block' }}
-                        href='/autism-score'
-                    >
-                       Autism-Score
-                    </Button>
                     </Menu>
                 </Box>
                 {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -228,41 +193,6 @@ const NavbarComponent = () => {
                         href='/prescription'
                     >
                        Prescription
-                    </Button>
-                    <Button
-                        key='all'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
-                        href='/all'
-                    >
-                       All
-                    </Button>
-                    <Button
-                        key='form1'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
-                        href='/form1'
-                    >
-                       form1
-                    </Button>
-                    <Button
-                        key='cars'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
-                        href='/cars'
-                    >
-                       Cars
-                    </Button>
-                    <Button
-                        key='form2'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
-                        href='/form2'
-                    >
-                       form2
-                    </Button>
-                    <Button
-                        key='autism-score'
-                        sx={{ my: 2, color: 'white', display: 'block' }}
-                        href='/autism-score'
-                    >
-                       Autism-Score
                     </Button>
                     {/* <Button
                         key='form2'

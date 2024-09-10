@@ -13,7 +13,6 @@ import jsPDF from 'jspdf'
 import moment from 'moment';
 import ReactToPrint from "react-to-print";
 import axios from 'axios'
-import fs from 'fs'
 import {IconButton} from '@material-ui/core'
 import SendIcon from '@mui/icons-material/Send';
 
@@ -49,8 +48,8 @@ const PreviewEmpty = ({ imageURL }) => {
             console.log(typeof(imgData))
             axios({
                 method: 'post',
-                // url: 'https://aakar-clinic.onrender.com/prescription',
-                url: 'http://localhost:5000/saveimg',
+                // url: 'https://aakar-clinic-02.onrender.com/prescription',
+                url: 'https://aakar-clinic-02.onrender.com//saveimg',
                 data:  {'base64String':imgData,'name':state.Name}, // you are sending body instead
                 headers: {
                 'Content-Type': 'application/json'

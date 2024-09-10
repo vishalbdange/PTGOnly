@@ -314,7 +314,7 @@ const Preview = (prop) => {
     const handleSubmitEdit = () =>{
 
         console.log(presEdited)
-        axios.put(`http://localhost:5000/all/prescriptions/${pres.pid}-${pres.name}`, presEdited)
+        axios.put(`https://aakar-clinic-02.onrender.com/all/prescriptions/${pres.pid}-${pres.name}`, presEdited)
         handleClose();
     }
 

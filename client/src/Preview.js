@@ -62,10 +62,10 @@ const Preview = ({imageURL}) => {
     // const csvData = {...state,prescription:prescription}
      prescription.map((text) =>{
         if(text.includes("general_medicines") ){
-            console.log("general_01")
-            console.log(text.replace("_general_medicines",""))
+            // console.log("general_01")
+            // console.log(text.replace("_general_medicines",""))/
             general_medicines_selected.push(text.replace("_general_medicines",""));
-            console.log(general_medicines_selected)
+            // console.log(general_medicines_selected)
         }else if(text.includes("epilepsy_medicines") ) {
             epilepsy_medicines_selected.push(text.replace("_epilepsy_medicines",""));
         }
@@ -99,8 +99,8 @@ const Preview = ({imageURL}) => {
             console.log(typeof(imgData))
             axios({
                 method: 'post',
-                // url: 'https://aakar-clinic.onrender.com/prescription',
-                url: 'http://localhost:5000/saveimg',
+                // url: 'https://aakar-clinic-02.onrender.com/prescription',
+                url: 'http://localhost:5010/saveimg',
                 data:  {'base64String':imgData,'name':state.Name}, // you are sending body instead
                 headers: {
                 'Content-Type': 'application/json'
@@ -147,7 +147,7 @@ const Preview = ({imageURL}) => {
         var count = JSON.parse(localStorage.getItem('counter') || 0);
       
         localStorage.setItem('counter', ++count)
-        console.log(JSON.parse(localStorage.getItem('counter')))
+        // console.log(JSON.parse(localStorage.getItem('counter')))
     },[window.unload])
     
     let  filteredCheckBoxes= [];
@@ -180,7 +180,7 @@ const Preview = ({imageURL}) => {
             setTextAreaStyle({width:"100%",border:"none",padding:"0%",margin:"0%",overflow:"hidden !important",maxHeight:"400px"});
         }
 
-    })
+    },[])
     function getAge(dob) {
           
         if(dob == ''){
@@ -320,8 +320,8 @@ const Preview = ({imageURL}) => {
             console.log(typeof(imgData))
             axios({
                 method: 'post',
-                // url: 'https://aakar-clinic.onrender.com/prescription',
-                url: 'http://localhost:5000/saveimg',
+                // url: 'https://aakar-clinic-02.onrender.com/prescription',
+                url: 'http://localhost:5010/mailtoperson',
                 data:  {'base64String':imgData,'name':Name,'mobile_no':m_num,'personToMail':personToMail}, // you are sending body instead
                 headers: {
                 'Content-Type': 'application/json'
@@ -391,15 +391,15 @@ const Preview = ({imageURL}) => {
                 {showMailBox ? (
                     <>
                     <div style={{display:"flex",flexDirection:"row",alignItems:"center"}}>
-                    <Input type="text" name="personToMail" style={{width:200}}placeholder="Email To .." onChnage={handleChangePersonToMail}/>
+                    <Input type="text" name="personToMail" style={{width:200}} placeholder="Email To .." onChange={handleChangePersonToMail}/>
                     <IconButton onClick={sendMailToPerson}><SendIcon/></IconButton>
                     </div>
                     </>
 
                 ):(<></>)}
-                <IconButton onClick={handleShare}><ShareIcon fontSize="large" color="primary" /></IconButton>
+                {/* <IconButton onClick={handleShare}><ShareIcon fontSize="large" color="primary" /></IconButton> */}
 
-                <IconButton><Link to="/prescription" target="_blank"><AddCircle /></Link></IconButton>
+                {/* <IconButton><Link to="/prescription" target="_blank"><AddCircle /></Link></IconButton>   */}
                 </div>
                  <br />
 

@@ -32,7 +32,7 @@ const getCreationTimeFromObjectId = (objectId) => {
 }
 
 app.get('/',(req,res)=>{
-    res.send("Home Server Page")
+    return res.send("Home Server Page")
 });
 
 app.get('/all',async (req,res)=>{
@@ -80,7 +80,6 @@ app.post('/saveimg',async (req,res) =>{
     const path = './screenshots/'
     const imgdata = req.body.base64String
     const name = req.body.name
-    const mobile_no = req.body.mobile_no
     var optionalObj = {'fileName': 'prescription_ss', 'type':'png'};
     try{
         base64ToImage(imgdata,path,optionalObj);
@@ -89,18 +88,20 @@ app.post('/saveimg',async (req,res) =>{
     }
     
     var transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
+        service: 'gmail',
         port: 465,
         secure: true,
+        logger:true,
+        debug:true,
         auth: {
-            user: 'vikingswc321@gmail.com',
-            pass: 'mobwojttvtkvswkw',
-        },
+            user: 'autismdrmumbai@gmail.com',
+            pass: process.env.Password,
+        }
     });
     var mailOptions = {
-        from: "aakarclinic@gmail.com",
-        to: "drkondekar@gmail.com",
-        subject: `Aakar Clinic - ${name}'s Prescription - ${mobile_no}`,
+        from: "autismdrmumbai@gmail.com",
+        to: "autismdrmumbai@gmail.com",
+        subject: `Aakar Clinic - ${name}'s Prescription`,
         attachments : [
             {   // file on disk as an attachment
                 filename: name + ' ' + Date.now() + '.png',
@@ -111,7 +112,7 @@ app.post('/saveimg',async (req,res) =>{
         headers: { 'x-myheader': 'test header' }
     };
     console.log("Nodemail headers added")
-    await transporter.sendMail(mailOptions, function(error, info){
+    transporter.sendMail(mailOptions, async function(error, info){
         if (error) {
             console.log(error.message);
             logs = [
@@ -121,8 +122,7 @@ app.post('/saveimg',async (req,res) =>{
                 }
             ]
 
-            res.status(400).json({ logs });
-            return {logs}; 
+            return res.status(400).json({ logs });
 
         } else {
             console.log('Prescription Email sent: ' + info.response);
@@ -138,12 +138,12 @@ app.post('/saveimg',async (req,res) =>{
     //     })
            
     
-    res.send("Mailing a Image Testing in progress !")
+    return res.send("Mailing a Image Testing in progress !")
 })
 
 app.post('/mailtoperson',async (req,res) =>{
     console.log("Save Img Request")
-    // console.log(req.body)
+    console.log(req.body)
     const path = './screenshots/'
     const imgdata = req.body.base64String
     const name = req.body.name
@@ -157,13 +157,15 @@ app.post('/mailtoperson',async (req,res) =>{
     }
     
     var transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
+        service: 'gmail',
         port: 465,
         secure: true,
+        logger:true,
+        debug:true,
         auth: {
-            user: 'vikingswc321@gmail.com',
-            pass: 'mobwojttvtkvswkw',
-        },
+            user: 'autismdrmumbai@gmail.com',
+            pass: process.env.Password,
+        }
     });
     var mailOptions = {
         from: "aakarclinic@gmail.comm",
@@ -206,7 +208,7 @@ app.post('/mailtoperson',async (req,res) =>{
     //     })
            
     
-    res.send("Mailing a Image Testing in progress !")
+    return res.send("Mailing a Image Testing in progress !")
 })
 
 app.post('/prescription',(req,res)=>{
@@ -235,10 +237,10 @@ app.post('/prescription',(req,res)=>{
             () => console.log("One Prescription added"), 
             (err) => {
              console.log(err.message)
-             res.send(err.message)
+             return res.send(err.message)
             }
         );
-        res.send("Post request sent");
+        return res.send("Post request sent");
 })
 
 // const prescription = new Prescription({

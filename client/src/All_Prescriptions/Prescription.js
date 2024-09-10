@@ -14,6 +14,7 @@ import axios from 'axios'
 import { Badge } from 'reactstrap';
 import {useParams} from 'react-router-dom';
 import Preview from './Preview.js'
+import {  inflate } from 'pako';
 
 const Prescription = () => {
     
@@ -24,14 +25,17 @@ const Prescription = () => {
     const pid = (params.pid).split('-')[0];
     var prescription = {};
     // useEffect(()=>{
-    //     axios.get('https://aakar-clinic.onrender.com/all')
+    //     axios.get('https://aakar-clinic-02.onrender.com/all')
     //     .then(response => setPrescriptions(response.data)  );
     //     if (prescriptions.find((pr) => pr.pid === pid) !== undefined) {
     //         setPrescription(prescriptions.find((pr) => pr.pid === pid))
     //       }
     //     console.log(prescription)
     // },[window.onload])
-    const prescriptions = JSON.parse(localStorage.getItem('all-prescriptions'));
+    const prescriptions = localStorage.getItem('all-prescriptions');
+    console.log(prescriptions)
+    prescriptions = inflate(prescriptions);
+    console.log(prescriptions)
     if(pid !== ''){
         if (prescriptions.find((pr) => pr.pid === pid) !== undefined) {
             prescription = prescriptions.find((pr) => pr.pid === pid)

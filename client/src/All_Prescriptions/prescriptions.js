@@ -27,6 +27,7 @@ import {
     TablePagination,
 } from '@mui/material';
 import Preview from "./Preview"
+import { deflate } from 'pako';
 
 const Prescriptions = () => {
 
@@ -46,14 +47,14 @@ const Prescriptions = () => {
     }
 
     useEffect(async () => {
-        const lastTenPresData = await axios.get('http://localhost:5000/getLastTen').then((response) => {
+        const lastTenPresData = await axios.get('https://aakar-clinic-02.onrender.com/getLastTen').then((response) => {
             setLoading(true)   
             setLastTenPrescriptions(response.data);
             setLoading(true)   
             return response.data
 
         });
-        const lastTwentyFivePresData = await axios.get('http://localhost:5000/getLastTwentyFive').then((response) => {
+        const lastTwentyFivePresData = await axios.get('https://aakar-clinic-02.onrender.com/getLastTwentyFive').then((response) => {
             setLoading(true)    
             console.log(response)
             setLastTwentyFivePrescriptions(response.data)
@@ -61,7 +62,7 @@ const Prescriptions = () => {
             return response.data
 
         });
-        const presData = await axios.get('http://localhost:5000/all').then((response) => {
+        const presData = await axios.get('https://aakar-clinic-02.onrender.com/all').then((response) => {
             setLoading(true)
             console.log(response)
             setPrescriptions(sortPrescriptionsByDate(response.data))
@@ -74,7 +75,11 @@ const Prescriptions = () => {
         console.log(presData);
         setCurrentPrescriptions(lastTenPresData);
         }, [])
-    localStorage.setItem('all-prescriptions', JSON.stringify(prescriptions))
+    console.log(prescriptions)
+    const compressedPrescriptions = deflate(prescriptions);
+    console.log(compressedPrescriptions)
+    localStorage.setItem('all-prescriptions', compressedPrescriptions)
+
     const [p_name, setP_name] = useState('')
     const [p_id, setP_id] = useState('')
 
